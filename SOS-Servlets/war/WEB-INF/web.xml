@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+	<servlet>
+		<servlet-name>Emisiones</servlet-name>
+		<servlet-class>sos.EmisionesServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Emisiones</servlet-name>
+		<url-pattern>/emisiones/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>TiposEmisiones</servlet-name>
+		<servlet-class>sos.TiposEmisionesServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TiposEmisiones</servlet-name>
+		<url-pattern>/tiposemisiones/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Consumos</servlet-name>
+		<servlet-class>sos.ConsumoEnergiaServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Consumos</servlet-name>
+		<url-pattern>/consumos/*</url-pattern>
+	</servlet-mapping>
+	
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+</web-app>
