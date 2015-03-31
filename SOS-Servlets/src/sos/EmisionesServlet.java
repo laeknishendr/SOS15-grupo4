@@ -112,8 +112,8 @@ public class EmisionesServlet extends HttpServlet {
 	}
 	
 	public void getEmissions(HttpServletRequest req, HttpServletResponse resp) 
-			throws IOException, EntityNotFoundException{
-		//devolver todo el mapa
+			throws IOException{
+		//TODO
 		
 		Query q = new Query ("Emission");
 		PreparedQuery pq = persistance.prepare(q); 
@@ -121,7 +121,13 @@ public class EmisionesServlet extends HttpServlet {
 		
 		
 		Gson gson = new Gson(); 
-		String emisionesJson = gson.toJson(persistance.get(e.getKey())); 
+		String emisionesJson = null;
+		try {
+			emisionesJson = gson.toJson(persistance.get(e.getKey()));
+		} catch (EntityNotFoundException e1) {
+			//  Auto-generated catch block
+			e1.printStackTrace();
+		} 
 		resp.getWriter().println(emisionesJson);
 		 
 		
@@ -129,6 +135,8 @@ public class EmisionesServlet extends HttpServlet {
 	
 	@SuppressWarnings("static-access")
 	private void postEmissions(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+		//TODO
+		
 		Entity e = extractEntity(req); 
 		Query q = new Query("Emission").setFilter(new FilterPredicate("name", Query.FilterOperator.EQUAL, "e.name")); 
 		if(e == null){ resp.setStatus(resp.SC_BAD_REQUEST); }
@@ -183,12 +191,18 @@ public class EmisionesServlet extends HttpServlet {
 	private void getEmission(HttpServletRequest req, HttpServletResponse resp, Entity e) 
 			throws IOException{
 		
+		
+		Emission em = new Emission( 
+			(String) e.getProperty("country"), 
+			(Double) e.getProperty("CO2emissions"),
+			(Integer)e.getProperty("population"), 
+			(Integer)e.getProperty("year")); 
+		
 		Gson gson = new Gson(); 
 		String gsonString = null;
 		
-		try { gsonString = gson.toJson(persistance.get(e.getKey())); } 
-		
-		catch (EntityNotFoundException e1) { e1.printStackTrace(); } 
+		gsonString = gson.toJson(em); 
+	
 		
 		resp.getWriter().println(gsonString);
 		
@@ -196,7 +210,7 @@ public class EmisionesServlet extends HttpServlet {
 	
 	private void updateEmission(HttpServletRequest req, HttpServletResponse resp, String resource) 
 			throws IOException{
-			
+		//TODO
 			Entity emission = extractEntity(req);
 			
 			if(emission == null){
