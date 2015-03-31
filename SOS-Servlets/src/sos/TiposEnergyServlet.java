@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
@@ -13,6 +16,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.gson.Gson;
 
 @SuppressWarnings("serial")
@@ -63,7 +67,6 @@ public class TiposEnergyServlet extends HttpServlet {
 		}
 		
 		out.close();
-
 	}
 	
 	@SuppressWarnings("static-access")
@@ -78,7 +81,53 @@ public class TiposEnergyServlet extends HttpServlet {
 		
 			case "PUT": resp.sendError(resp.SC_METHOD_NOT_ALLOWED, "METHOD_NOT_ALLOWED"); break;  
 		
-			case "DELETE": ds.clear(); break; 
+			case "DELETE": removeList(req, resp); break; 
+		}
+	}
+	
+	@SuppressWarnings("static-access")
+	private void postEnergies(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+		
+		Entity e = extractEntity(req);
+		Query q = new Query ("Energy").setFilter(new FilterPredicate("name", Query.FilterOperator.EQUAL, e));
+		
+		if(e == null){
+			resp.setStatus(resp.SC_BAD_REQUEST);
+		}else if(q != null){
+			resp.setStatus(resp.SC_CONFLICT);
+		}else{
+			datastore.put(e);
+		}
+	}
+	
+	private void getEnergies(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+		//TODO
+		Gson gson = new Gson();
+		List<String> jsonString = null;  //gson.toJson(ds.values());
+		
+		Query q = new Query("Energy");
+		PreparedQuery pq = datastore.prepare(q);
+		Iterator<Entity> it = pq.asIterator();
+		
+		while(it.hasNext()){
+			String aux = gson.toJson(it.next()); //asi va pisando las anteriores iteraciones del while, buscar metodo 
+			//(guardarlo en un mapa con clave el pais y meterle los valores solo?)	
+			//jsonString sea una List<String> y un string aux que si se pueda ir pisando?
+			jsonString.add(aux);
+		}
+		
+		resp.getWriter().println(jsonString);		
+	}
+	
+	private void removeList(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+		
+		Query q = new Query("Energy");
+		PreparedQuery pq = datastore.prepare(q);
+		Iterator<Entity> it = pq.asIterator();
+		
+		while(it.hasNext()){
+			Entity e = it.next();
+			datastore.delete(e.getKey());
 		}
 	}
 	
@@ -86,7 +135,7 @@ public class TiposEnergyServlet extends HttpServlet {
 	private void processResource(String method, String resource, HttpServletRequest req, 
 			HttpServletResponse resp) throws IOException{
 		
-		Query q = new Query("Emissions").setFilter(new FilterPredicate("name",Query.FilterOperator.EQUAL, resource));
+		Query q = new Query("Energy").setFilter(new FilterPredicate("name",Query.FilterOperator.EQUAL, resource));
 		PreparedQuery pq = datastore.prepare(q);
 		Entity e = pq.asSingleEntity();
 		
@@ -100,7 +149,7 @@ public class TiposEnergyServlet extends HttpServlet {
 		
 		switch(method){
 		
-			case "GET": getEnergy(req, resp, resource); break; 
+			case "GET": getEnergy(req, resp, e); break; 
 		
 			case "PUT": updateEnergy(req, resp, resource); break; 
 		
@@ -108,29 +157,35 @@ public class TiposEnergyServlet extends HttpServlet {
 		}
 	}
 	
+	private void getEnergy(HttpServletRequest req, HttpServletResponse resp, Entity e) 
+			throws IOException{
+		//pasar la entidad a objeto y el objeto a json y devolverla por pantalla
+		Gson gson = new Gson();
+		String jsonString = null;
+	
+		Energy en = new Energy((String) e.getProperty("name"), 
+				(double) e.getProperty("no_fossil"), 
+				(double) e.getProperty("fossil"), 
+				(double) e.getProperty("temperature"));
+		
+		jsonString = gson.toJson(en);
+		
+		resp.getWriter().println(jsonString);
+	}
+	
 	@SuppressWarnings("static-access")
-	private void postEnergies(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	private void updateEnergy(HttpServletRequest req, HttpServletResponse resp, String resource) 
+			throws IOException{
 		
 		Entity e = extractEntity(req);
-		Query q = new Query("Emissions").setFilter(new FilterPredicate("name", Query.FilterOperator.EQUAL, "e.name"));
 		
 		if(e == null){
 			resp.setStatus(resp.SC_BAD_REQUEST);
-		}else if(q != null){
-			//si la entidad ya esta, fallo
-			resp.setStatus(resp.SC_CONFLICT);
+		}else if(e.getProperty("name") != resource){
+			resp.setStatus(resp.SC_FORBIDDEN);
 		}else{
 			datastore.put(e);
 		}
-	}
-	
-	private void getEnergies(HttpServletRequest req, HttpServletResponse resp) throws IOException{
-		
-		Gson gson = new Gson();
-		String jsonString = gson.toJson(ds.values());
-		
-		resp.getWriter().println(jsonString);
-		
 	}
 	
 	private Energy extractEnergy(HttpServletRequest req) throws IOException{
@@ -153,31 +208,6 @@ public class TiposEnergyServlet extends HttpServlet {
 		}
 		
 		return e;
-	}
-	
-	@SuppressWarnings("static-access")
-	private void updateEnergy(HttpServletRequest req, HttpServletResponse resp, String resource) 
-			throws IOException{
-		
-		Entity e = extractEntity(req);
-		
-		if(e == null){
-			resp.setStatus(resp.SC_BAD_REQUEST);
-		}else if(e.name != resource){
-			resp.setStatus(resp.SC_FORBIDDEN);
-		}else{
-			datastore.put(e);
-		}
-	}
-	
-	private void getEnergy(HttpServletRequest req, HttpServletResponse resp, String resource) 
-			throws IOException{
-		
-		Gson gson = new Gson();
-		String jsonString = gson.toJson(ds.get(resource));
-		
-		resp.getWriter().println(jsonString);
-		
 	}
 	
 	private Entity extractEntity(HttpServletRequest req) throws IOException{
