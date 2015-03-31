@@ -1,23 +1,37 @@
 package sos;
 
+/** 
+ * Creado por Manuel Aguilar Arroyo
+ * laeknishendr314@gmail.com
+ * 
+ */
+
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.gson.Gson;
 
 @SuppressWarnings("serial")
 public class EmisionesServlet extends HttpServlet {
+	//persistencia de datos 
+	DatastoreService persistance = DatastoreServiceFactory.getDatastoreService(); 
 	
-	static HashMap<String, Emission> persistance = new HashMap<String, Emission>();
- 
 	
+	/*	métodos principales (do) */
+
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
@@ -67,8 +81,17 @@ public class EmisionesServlet extends HttpServlet {
 		}
 		out.close(); 
 	}
-	@SuppressWarnings("static-access")
+	
 
+	
+	/* métodos CRUD relacionados con la obtención de la lista de elementos del dataset
+	 * 
+	 * - GET
+	 * - POST
+	 * - DELETE
+	 */
+	
+	@SuppressWarnings("static-access")
 	public void processResourceList(HttpServletRequest req, HttpServletResponse resp, String method) 
 			throws IOException{
 		
@@ -80,7 +103,7 @@ public class EmisionesServlet extends HttpServlet {
 		
 		case "POST": postEmissions(req, resp);break; 
 		
-		case "DELETE": persistance.clear();  break;//se elimina todo el contenido del mapa!
+		case "DELETE": persistance.;  break;//se elimina todo el contenido del mapa!
 		
 		
 		}
@@ -115,16 +138,30 @@ public class EmisionesServlet extends HttpServlet {
 	}
 	
 	
+	/* métodos CRUD para tratamiento de elementos concretos del datase
+	* - GET
+	* - PUT
+	* - DELETE
+	*/ 
+	
 	@SuppressWarnings("static-access")
 	public void processResource(HttpServletRequest req, HttpServletResponse resp, String method, String resource) 
 			throws IOException{
 			
-			if(!persistance.containsKey(resource)) {
+			
+			Query q = new Query ("Emission").setFilter(new FilterPredicate("country", Query.FilterOperator.EQUAL, resource)); 
+			PreparedQuery pq = persistance.prepare(q); 
+			Entity e = pq.asSingleEntity(); 
+			
+			if(e==null) {
 				resp.setStatus(resp.SC_NOT_FOUND); return;
 				
 			}
+			
+			/*
 			Emission em = new Emission("Spain", 9999.99, 10, 2033); 
 			persistance.put(em.country, em);						
+			*/ 
 			
 			switch(method){
 			
@@ -136,7 +173,7 @@ public class EmisionesServlet extends HttpServlet {
 			
 			
 			
-			case "DELETE": persistance.remove(resource); break;//se elimina únicamente el resource del mapa
+			case "DELETE": persistance.delete(e.getKey());
 			
 			
 			}
@@ -149,24 +186,27 @@ public class EmisionesServlet extends HttpServlet {
 		resp.getWriter().println(gsonString);
 		
 	}
-
-
 	
 	private void updateEmission(HttpServletRequest req, HttpServletResponse resp, String resource) 
 			throws IOException{
 			
-			Emission emission = extractEmission(req);
+			Entity emission = extractEmission(req);
+			
 			if(emission == null){
 				resp.sendError(400);
-			}else if (emission.country != resource){
+			}else if (emission.getProperty("country")!= resource){
 				resp.sendError(403); 
 			}else{
-			persistance.put(emission.country, emission); 
+			persistance.put(emission); 
 			}
 		
 	}
 	
-	private Emission extractEmission(HttpServletRequest req) throws IOException{
+	
+	
+	//método general para obtener emisiones transferidas via JSON
+	
+	private Entity extractEmission(HttpServletRequest req) throws IOException{
 		Emission e = null; 
 		Gson gson = new Gson(); 
 		StringBuilder sb = new StringBuilder(); 
@@ -189,14 +229,21 @@ public class EmisionesServlet extends HttpServlet {
 		try{
 			System.out.println("String to be parsed: <"+jsonString+">");
 			e = gson.fromJson(jsonString, Emission.class); 
+			
 			System.out.println("Emission extracted: "+e+" (name = '"+e.country+", "+e.year+"')");
 		}catch(Exception ex){
 			System.out.println("ERROR parsing Emison: ");
 				System.out.println("ERROR parsing Emission: " + ex.getMessage()); 
 			}
 
-		return e;
 		
+		Entity ee = new Entity("Emission"); 
+		ee.setProperty("country", e.country); 
+		ee.setProperty("CO2emissions", e.CO2emissions); 
+		ee.setProperty("population", e.population);
+		ee.setProperty("year",e.year);
+		
+		return ee; 
 	}
 	
 	
