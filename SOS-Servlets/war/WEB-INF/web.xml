@@ -14,12 +14,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>TiposEmisiones</servlet-name>
-		<servlet-class>sos.TiposEmisionesServlet</servlet-class>
+		<servlet-name>TiposEnergia</servlet-name>
+		<servlet-class>sos.TiposEnergyServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>TiposEmisiones</servlet-name>
-		<url-pattern>/tiposemisiones/*</url-pattern>
+		<servlet-name>TiposEnergia</servlet-name>
+		<url-pattern>/tiposenergias/*</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
