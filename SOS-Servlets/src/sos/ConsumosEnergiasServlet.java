@@ -1,5 +1,3 @@
-
-
 package sos;
 
 import java.io.BufferedReader;
@@ -7,18 +5,25 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.gson.Gson;
 
 
 @SuppressWarnings("serial")
 public class ConsumosEnergiasServlet extends HttpServlet {
 	
-	static HashMap<String, Consumos> ds = new HashMap<String, Consumos>();
+	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
  
 	
 	
@@ -40,14 +45,15 @@ public class ConsumosEnergiasServlet extends HttpServlet {
 	}
 	
 	public void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		/*Este método, que utilizaremos como método por
+		/*Este mÃ©todo, que utilizaremos como mÃ©todo por
 		 * defecto para todos los comandos, tendremos que
-		 * pillar el contenido de la URL, el método
+		 * pillar el contenido de la URL, el mÃ©todo
 		 * por el que se ha accedido y generar una respuesta.
 		 *
 		 * */
-		Consumos em = new Consumos("USA", 1685852.5, 2164458.4, 370887.55, 2009); 
-		ds.put(em.country, em);	
+		
+	/*	Consumos em = new Consumos("USA", 1685852.5, 2164458.4, 370887.55, 2009); 
+		datastore.put(em.country, em);	*/
 		
 		PrintWriter out = resp.getWriter(); 
 		String path = req.getPathInfo(); 
@@ -60,7 +66,7 @@ public class ConsumosEnergiasServlet extends HttpServlet {
 		if(path != null){
 			
 			/* En caso de que el path no sea nulo, accedemos al 
-			 * recurso en concreto. Aquí podremos hacer GET, POST y DELETE.  
+			 * recurso en concreto. AquÃ­ podremos hacer GET, POST y DELETE.  
 			 * 
 			 * */
 			
@@ -92,20 +98,29 @@ public class ConsumosEnergiasServlet extends HttpServlet {
 		
 		case "POST": postConsumos(req, resp);break; 
 		
-		case "DELETE": ds.clear();  break;//se elimina todo el contenido del mapa!
+		case "DELETE": //datastore.delete(e.getKey());  break;//se elimina todo el contenido del mapa!
 		
 		
 		}
 	}
 	
-	private void getConsumos(HttpServletRequest req, HttpServletResponse resp) 
+	private void getConsumos(HttpServletRequest req, HttpServletResponse resp, String resource) 
 			throws IOException{
 		//devolver todo el mapa
+		Query q = new Query ("Consumos");
+		PreparedQuery pq = datastore.prepare(q); 
+		Entity e = pq.asSingleEntity(); 
+		
 		Gson gson = new Gson(); 
 		resp.getWriter().println(gson.toString());
-		String consumosJson = gson.toJson(ds.values()); 
+		String consumosJson = null;
+		try {
+			consumosJson = gson.toJson(datastore.get(e.getKey()));
+		} catch (com.google.appengine.api.datastore.EntityNotFoundException e1) {
+			e1.printStackTrace();
+		} 
 		resp.getWriter().println(consumosJson);
-		resp.getWriter().println(ds.toString()); 
+		resp.getWriter().println(datastore.toString()); 
 		
 	}
 	
@@ -113,54 +128,99 @@ public class ConsumosEnergiasServlet extends HttpServlet {
 	private void postConsumos(HttpServletRequest req, HttpServletResponse resp) 
 			throws IOException{
 		
-		Consumos con = extractConsumos(req); 
 		
-		if(ds.containsKey(con)){
+		Entity e = extractEntity(req);
+		
+		if(e==null){
+			resp.setStatus(resp.SC_BAD_REQUEST);
+		}else if ((new Query("Entity").setFilter(new FilterPredicate("country",Query.FilterOperator.EQUAL,"e.name")))!=null){
+			resp.setStatus(resp.SC_CONFLICT);
+		}else{
+			datastore.put(e);
+		}
+		}
+		
+		/*if(datastore.containsKey(con)){
 			resp.setStatus(resp.SC_CONFLICT);
 		}else if (con == null){
 			resp.setStatus(resp.SC_BAD_REQUEST); 
 			resp.getWriter().println("no me vale");
 		}else{
-			ds.put(con.country, con); 
+			datastore.put(con.country, con); 
 		}
 		
 	}
+	*/
 	
+	private Entity extractEntity(HttpServletRequest req) throws IOException{
+		
+		Consumos e = this.extractConsumos(req);
+		Entity entity = new Entity("Consumos");
+		
+		entity.setProperty("country", e.country);
+		entity.setProperty("energy_production", e.energy_production);
+		entity.setProperty("energy_use", e.energy_use);
+		entity.setProperty("energy_import", e.energy_import);
+		entity.setProperty("year", e.year);
+		
 	
+		return entity;
+	}
+
 	private void processResource(String method, String resource, HttpServletRequest req, HttpServletResponse resp) 
 			throws IOException{
 		
-		if(method == "POST"){
+/*		if(method == "POST"){
 			resp.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-		}
-			
-		
-		if(!ds.containsKey(resp)) {
+		}	
+		if(!datastore.containsKey(resp)) {
 			resp.setStatus(HttpServletResponse.SC_NOT_FOUND); 
-			return; 
-				
+			return; 	
 		}
 								
-			
+*/		
+		Query q = new Query ("Consumos").setFilter(new FilterPredicate("country", Query.FilterOperator.EQUAL, resource));		
+		PreparedQuery pq = datastore.prepare(q);
+		
+		Entity e = pq.asSingleEntity();
+		
+		
+		if(e == null)
+		{
+			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		
+		
 		switch(method){
 			
-		case "GET": getConsumo(resource, req, resp); break;
+		case "GET": getConsumos(req, resp, e); break;
 			
 		case "PUT": updateConsumos(resource, req, resp); break; 
 			
-		case "DELETE": ds.remove(resource); break;//se elimina únicamente el resource del mapa
+		case "DELETE": datastore.delete(e.getKey()); break;//se elimina Ãºnicamente el resource del mapa
 			
 			
 		}
 	}
-	/*
-	private void getConsumos(String resource, HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	
+	private void getConsumos(HttpServletRequest req, HttpServletResponse resp, Entity e) throws IOException{
+		
 		Gson gson = new Gson(); 
-		String jsonString = gson.toJson(ds.get(resource)); 
-		resp.getWriter().println(jsonString);
+		
+		String jsonString = null;
+				try{
+					jsonString = gson.toJson(datastore.get(e.getKey()));
+				}
+				catch(EntityNotFoundException e1){
+					e1.printStackTrace();
+	}
+				
+					resp.getWriter().println(jsonString);
 		
 	}
-*/
+
+
 
 	
 	private void updateConsumos(String resource, HttpServletRequest req, HttpServletResponse resp) 
@@ -172,7 +232,7 @@ public class ConsumosEnergiasServlet extends HttpServlet {
 			}else if (consumo.country != resource){
 				resp.sendError(403); 
 			}else{
-			ds.put(consumo.country, consumo); 
+			datastore.put(consumo.country, consumo); 
 			}
 		
 	}
@@ -193,7 +253,7 @@ public class ConsumosEnergiasServlet extends HttpServlet {
 		}
 		
 		System.out.println("el StringBuilder ahora es "+ sb);
-		System.out.println("el método del req es "+ req.getMethod());
+		System.out.println("el mÃ©todo del req es "+ req.getMethod());
 		
 		jsonString = sb.toString(); 
 		
@@ -220,4 +280,4 @@ public class ConsumosEnergiasServlet extends HttpServlet {
 	
 	
 	
-}	
+}
