@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
@@ -50,7 +51,8 @@ public class EmisionesServlet extends HttpServlet {
 		process(req, resp);
 	}
 	
-	public void process(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+	public void process(HttpServletRequest req, HttpServletResponse resp) 
+			throws IOException, ServletException {
 		/*Este método, que utilizaremos como método por
 		 * defecto para todos los comandos, tendremos que
 		 * pillar el contenido de la URL, el método
@@ -92,7 +94,7 @@ public class EmisionesServlet extends HttpServlet {
 	 */
 	
 	@SuppressWarnings("static-access")
-	public void processResourceList(HttpServletRequest req, HttpServletResponse resp, String method) 
+	public void processResourceList(HttpServletRequest req, HttpServletResponse resp,  String method) 
 			throws IOException{
 		
 		switch(method){
@@ -103,7 +105,7 @@ public class EmisionesServlet extends HttpServlet {
 		
 		case "POST": postEmissions(req, resp);break; 
 		
-		case "DELETE": persistance.;  break;//se elimina todo el contenido del mapa!
+		case "DELETE": //persistance.delete(persistance.Query());
 		
 		
 		}
@@ -111,31 +113,43 @@ public class EmisionesServlet extends HttpServlet {
 	
 	public void getEmissions(HttpServletRequest req, HttpServletResponse resp) 
 			throws IOException{
-		//devolver todo el mapa
-		Gson gson = new Gson(); 
+		//TODO
 		
-		String emisionesJson = gson.toJson(persistance.values()); 
+		Query q = new Query ("Emission");
+		PreparedQuery pq = persistance.prepare(q); 
+		Entity e = pq.asSingleEntity(); 
+		
+		
+		Gson gson = new Gson(); 
+		String emisionesJson = null;
+		try {
+			emisionesJson = gson.toJson(persistance.get(e.getKey()));
+		} catch (EntityNotFoundException e1) {
+			//  Auto-generated catch block
+			e1.printStackTrace();
+		} 
 		resp.getWriter().println(emisionesJson);
 		 
 		
 	}
 	
 	@SuppressWarnings("static-access")
-	public void postEmissions(HttpServletRequest req, HttpServletResponse resp) 
-			throws IOException{
+	private void postEmissions(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+		//TODO
 		
-		Emission emiss = extractEmission(req); 
+		Entity e = extractEntity(req); 
+		Query q = new Query("Emission").setFilter(new FilterPredicate("name", Query.FilterOperator.EQUAL, "e.name")); 
+		if(e == null){ resp.setStatus(resp.SC_BAD_REQUEST); }
 		
-		if(persistance.containsKey(emiss)){
-			resp.setStatus(resp.SC_CONFLICT);
-		}else if (emiss == null){
-			resp.setStatus(resp.SC_BAD_REQUEST); 
-			resp.getWriter().println("error");
+		else if(q != null){ 
+			//si la entidad ya esta, fallo
+			resp.setStatus(resp.SC_CONFLICT); 
 		}else{
-			persistance.put(emiss.country, emiss); 
-		}
+			persistance.put(e); 
+		} 
 		
-	}
+		}
+	
 	
 	
 	/* métodos CRUD para tratamiento de elementos concretos del datase
@@ -145,7 +159,7 @@ public class EmisionesServlet extends HttpServlet {
 	*/ 
 	
 	@SuppressWarnings("static-access")
-	public void processResource(HttpServletRequest req, HttpServletResponse resp, String method, String resource) 
+	public void processResource(HttpServletRequest req, HttpServletResponse resp, String resource, String method) 
 			throws IOException{
 			
 			
@@ -154,43 +168,50 @@ public class EmisionesServlet extends HttpServlet {
 			Entity e = pq.asSingleEntity(); 
 			
 			if(e==null) {
-				resp.setStatus(resp.SC_NOT_FOUND); return;
-				
+				resp.setStatus(resp.SC_NOT_FOUND); 
+				return;	
 			}
-			
-			/*
-			Emission em = new Emission("Spain", 9999.99, 10, 2033); 
-			persistance.put(em.country, em);						
-			*/ 
 			
 			switch(method){
 			
-			case "GET": getEmission(req, resp, resource); break;
+			case "GET": getEmission(req, resp, e); 
+				
+				//getEmission(req, resp, resource); break;
 			
 			case "PUT": updateEmission(req, resp, resource); break; 
 			
 			case "POST": resp.sendError(resp.SC_METHOD_NOT_ALLOWED, "METHOD_NOT_ALLOWED"); break;
-			
-			
-			
+						
 			case "DELETE": persistance.delete(e.getKey());
 			
 			
 			}
 	}
 	
-	private void getEmission(HttpServletRequest req, HttpServletResponse resp,
-			String resource) throws IOException{
+	private void getEmission(HttpServletRequest req, HttpServletResponse resp, Entity e) 
+			throws IOException{
+		
+		
+		Emission em = new Emission( 
+			(String) e.getProperty("country"), 
+			(Double) e.getProperty("CO2emissions"),
+			(Integer)e.getProperty("population"), 
+			(Integer)e.getProperty("year")); 
+		
 		Gson gson = new Gson(); 
-		String gsonString = gson.toJson(persistance.get(resource)); 
+		String gsonString = null;
+		
+		gsonString = gson.toJson(em); 
+	
+		
 		resp.getWriter().println(gsonString);
 		
 	}
 	
 	private void updateEmission(HttpServletRequest req, HttpServletResponse resp, String resource) 
 			throws IOException{
-			
-			Entity emission = extractEmission(req);
+		//TODO
+			Entity emission = extractEntity(req);
 			
 			if(emission == null){
 				resp.sendError(400);
@@ -206,7 +227,7 @@ public class EmisionesServlet extends HttpServlet {
 	
 	//método general para obtener emisiones transferidas via JSON
 	
-	private Entity extractEmission(HttpServletRequest req) throws IOException{
+	private Emission extractEmission(HttpServletRequest req) throws IOException{
 		Emission e = null; 
 		Gson gson = new Gson(); 
 		StringBuilder sb = new StringBuilder(); 
@@ -235,7 +256,13 @@ public class EmisionesServlet extends HttpServlet {
 			System.out.println("ERROR parsing Emison: ");
 				System.out.println("ERROR parsing Emission: " + ex.getMessage()); 
 			}
-
+		return e; 
+		
+		
+	}
+	
+	private Entity extractEntity(HttpServletRequest req) throws IOException{
+		Emission e = extractEmission(req); 
 		
 		Entity ee = new Entity("Emission"); 
 		ee.setProperty("country", e.country); 
