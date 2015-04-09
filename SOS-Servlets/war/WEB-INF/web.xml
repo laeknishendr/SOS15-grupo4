@@ -24,7 +24,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	
 	<servlet>
 		<servlet-name>Consumos</servlet-name>
-		<servlet-class>sos.ConsumoEnergiaServlet</servlet-class>
+		<servlet-class>sos.ConsumosEnergiasServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Consumos</servlet-name>
