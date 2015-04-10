@@ -3,6 +3,7 @@ package sos;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -27,18 +28,22 @@ public class TiposEnergyServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		process(req, resp);
+		System.out.println("doGet");
 	}
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		process(req, resp);
+		System.out.println("doPost");
 	}
 	
 	public void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		process(req, resp);
+		System.out.println("doPut");
 	}
 	
 	public void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException{
 		process(req, resp);
+		System.out.println("doDelete");
 	}
 	
 	public void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, 
@@ -65,7 +70,7 @@ public class TiposEnergyServlet extends HttpServlet {
 			
 			processResourceList(method, req, resp);
 		}
-		
+		System.out.println("metodo process");
 		out.close();
 	}
 	
@@ -83,40 +88,48 @@ public class TiposEnergyServlet extends HttpServlet {
 		
 			case "DELETE": removeList(req, resp); break; 
 		}
+		System.out.println("processLIst");
 	}
 	
 	@SuppressWarnings("static-access")
 	private void postEnergies(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		
 		Entity e = extractEntity(req);
-		Query q = new Query ("Energy").setFilter(new FilterPredicate("name", Query.FilterOperator.EQUAL, e));
+		Query q = new Query ("Energy").setFilter(new FilterPredicate("name", Query.FilterOperator.EQUAL, e.getProperty("name")));
+		PreparedQuery pq = datastore.prepare(q);
+		Entity en = pq.asSingleEntity();
+		System.out.println(en);
+		System.out.println(e);
 		
 		if(e == null){
 			resp.setStatus(resp.SC_BAD_REQUEST);
-		}else if(q != null){
+		}else if(en != null){
 			resp.setStatus(resp.SC_CONFLICT);
-		}else{
+		}else{System.out.println("entra");
 			datastore.put(e);
 		}
+		System.out.println("post lista");
+		
 	}
 	
 	private void getEnergies(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		//TODO
 		Gson gson = new Gson();
-		List<String> jsonString = null;  //gson.toJson(ds.values());
+		List<String> jsonString = new ArrayList<String>();  //gson.toJson(ds.values());
 		
 		Query q = new Query("Energy");
 		PreparedQuery pq = datastore.prepare(q);
 		Iterator<Entity> it = pq.asIterator();
 		
 		while(it.hasNext()){
-			String aux = gson.toJson(it.next()); //asi va pisando las anteriores iteraciones del while, buscar metodo 
+			String aux = gson.toJson(it.next(), String.class); //asi va pisando las anteriores iteraciones del while, buscar metodo 
 			//(guardarlo en un mapa con clave el pais y meterle los valores solo?)	
 			//jsonString sea una List<String> y un string aux que si se pueda ir pisando?
 			jsonString.add(aux);
 		}
 		
-		resp.getWriter().println(jsonString);		
+		resp.getWriter().println(jsonString);	
+		System.out.println("get lista");
 	}
 	
 	private void removeList(HttpServletRequest req, HttpServletResponse resp) throws IOException{
@@ -129,6 +142,7 @@ public class TiposEnergyServlet extends HttpServlet {
 			Entity e = it.next();
 			datastore.delete(e.getKey());
 		}
+		System.out.println("borrar lista");
 	}
 	
 	@SuppressWarnings("static-access")
@@ -153,8 +167,9 @@ public class TiposEnergyServlet extends HttpServlet {
 		
 			case "PUT": updateEnergy(req, resp, resource); break; 
 		
-			case "DELETE": datastore.delete(extractEntity(req).getKey()); break;
+			case "DELETE": removeResource(req, resp, e);/*datastore.delete(e.getKey()); System.out.println("borrar"); */break;
 		}
+		System.out.println("process elto");
 	}
 	
 	private void getEnergy(HttpServletRequest req, HttpServletResponse resp, Entity e) 
@@ -162,15 +177,20 @@ public class TiposEnergyServlet extends HttpServlet {
 		//pasar la entidad a objeto y el objeto a json y devolverla por pantalla
 		Gson gson = new Gson();
 		String jsonString = null;
-	
-		Energy en = new Energy((String) e.getProperty("name"), 
-				(double) e.getProperty("no_fossil"), 
-				(double) e.getProperty("fossil"), 
-				(double) e.getProperty("temperature"));
+		if(e == null){
+			resp.setStatus(resp.SC_NOT_FOUND); return;
+		}else{
+			Energy en = new Energy((String) e.getProperty("name"), 
+					(double) e.getProperty("no_fossil"), 
+					(double) e.getProperty("fossil"), 
+					(double) e.getProperty("temperature"));
+			
+			jsonString = gson.toJson(en);
+		}
 		
-		jsonString = gson.toJson(en);
 		
 		resp.getWriter().println(jsonString);
+		System.out.println("get elto");
 	}
 	
 	@SuppressWarnings("static-access")
@@ -185,6 +205,16 @@ public class TiposEnergyServlet extends HttpServlet {
 			resp.setStatus(resp.SC_FORBIDDEN);
 		}else{
 			datastore.put(e);
+		}
+		System.out.println("put elto");
+	}
+	
+	private void removeResource(HttpServletRequest req, HttpServletResponse resp, Entity e){
+		
+		if(e == null){
+			resp.setStatus(resp.SC_NOT_FOUND); return;
+		}else{
+			datastore.delete(e.getKey());
 		}
 	}
 	
@@ -204,7 +234,7 @@ public class TiposEnergyServlet extends HttpServlet {
 		try{
 			e = gson.fromJson(jsonString, Energy.class);
 		}catch(Exception em){
-			System.out.println("Error parsin Emissions: "+em.getMessage());
+			System.out.println("Error parsin Energy: "+em.getMessage());
 		}
 		
 		return e;
@@ -213,7 +243,7 @@ public class TiposEnergyServlet extends HttpServlet {
 	private Entity extractEntity(HttpServletRequest req) throws IOException{
 		
 		Energy e = extractEnergy(req);
-		Entity entity = new Entity("Emissions");
+		Entity entity = new Entity("Energy");
 		
 		entity.setProperty("name", e.name);
 		entity.setProperty("no_fossil", e.no_fossil);

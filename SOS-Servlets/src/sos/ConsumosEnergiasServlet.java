@@ -104,7 +104,7 @@ public class ConsumosEnergiasServlet extends HttpServlet {
 		}
 	}
 	
-	private void getConsumos(HttpServletRequest req, HttpServletResponse resp, String resource) 
+	private void getConsumos(HttpServletRequest req, HttpServletResponse resp) 
 			throws IOException{
 		//devolver todo el mapa
 		Query q = new Query ("Consumos");
@@ -194,9 +194,9 @@ public class ConsumosEnergiasServlet extends HttpServlet {
 		
 		switch(method){
 			
-		case "GET": getConsumos(req, resp, e); break;
+		//case "GET": getConsumos(req, resp, e); break;
 			
-		case "PUT": updateConsumos(resource, req, resp); break; 
+		//case "PUT": updateConsumos(resource, req, resp); break; 
 			
 		case "DELETE": datastore.delete(e.getKey()); break;//se elimina únicamente el resource del mapa
 			
@@ -204,7 +204,7 @@ public class ConsumosEnergiasServlet extends HttpServlet {
 		}
 	}
 	
-	private void getConsumos(HttpServletRequest req, HttpServletResponse resp, Entity e) throws IOException{
+	/*private void getConsumos(HttpServletRequest req, HttpServletResponse resp, Entity e) throws IOException{
 		
 		Gson gson = new Gson(); 
 		
@@ -218,12 +218,12 @@ public class ConsumosEnergiasServlet extends HttpServlet {
 				
 					resp.getWriter().println(jsonString);
 		
-	}
+	}*/
 
 
 
 	
-	private void updateConsumos(String resource, HttpServletRequest req, HttpServletResponse resp) 
+	/*private void updateConsumos(String resource, HttpServletRequest req, HttpServletResponse resp) 
 			throws IOException{
 			
 		Consumos consumo = extractConsumos(req);
@@ -235,7 +235,7 @@ public class ConsumosEnergiasServlet extends HttpServlet {
 			datastore.put(consumo.country, consumo); 
 			}
 		
-	}
+	}*/
 	
 	private Consumos extractConsumos(HttpServletRequest req) throws IOException{
 		Consumos e = null; 
