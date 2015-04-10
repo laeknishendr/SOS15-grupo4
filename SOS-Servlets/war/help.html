@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Manual de usuario</title>
+    <style>
+    	ul.menu li a {text-indent:em; color:blue}
+    </style>
+  </head>
+
+  <body>
+    <h1>Manual de usuario</h1>
+    <div>
+    	<ul>
+    		<li><a href="#">GET</a></li>
+    		<li style="color:blue"><a href="post">POST</a></li>
+    		<li><a href="put">PUT</a></li>
+    		<li><a href="delete">DELETE</a></li>
+    	</ul>
+	</div>
+	
+	<div>
+		<h2 name="get">GET</h2>
+			<h3>Acción sobre lista</h3>
+				<p>Si la base de datos tiene elementos, el servidor devolverá una lista de las entradas. Si la base de datos está
+				vacía, devolverá una lista vacia.</p>
+			<h3>Acción sobre recurso</h3>
+				<p>Si en la base de datos hay un recurso cuya clave sea igual al nombre solicitado, el servidor devolverá dicho
+				elemento. Si no lo hay, el servidor devolverá un error 404, NOT FOUND.</p>
+		
+		<h2 name="post">POST</h2>
+			<h3>Acción sobre lista</h3>
+				<p>Si no se introduce ningún dato, el servidor devolverá un error 400, BAD REQUEST. Si el dato que se quiere introducir 
+				ya está en la base de datos, el servidor devolverá un error 409, CONFLICT. Si no, el servidor devolverá 200 OK, y 
+				guardará el dato en la base de datos.</p>
+			<h3>Acción sobre recurso</h3>
+				<p>Esta acción no está permitida, el servidor devolverá un error 405, METHOD_NOT_ALLOWED.</p>
+		
+		<h2 name="put">PUT</h2>
+			<h3>Acción sobre lista</h3>
+				<p>Esta acción no está permitida, el servidor devolverá un error 405, METHOD_NOT_ALLOWED.</p>
+			<h3>Acción sobre recurso</h3>
+				<p>Si no se introduce ningún dato, el servidor devolverá un error 400, BAD REQUEST. Si el dato que se quiere introducir 
+				no está en la base de datos, el servidor devolverá un error 403, FORBIDDEN. Si no, el servidor devolverá 200 OK, y 
+				actualizará el dato en la base de datos.</p>
+		
+		<h2 name="delete">DELETE</h2>
+			<h3>Acción sobre lista</h3>
+				<p>El servidor devolverá 200 OK y borrará toda la base de datos.</p>
+			<h3>Acción sobre recurso</h3>
+				<p>Si el elemento no está en la base de datos, el servidor devolverá un error 404, NOT FOUND. Si no, el servidor 
+				devolverá 200 OK y borrará el elemento de la base de datos.</p>
+	</div>    
+    
+  </body>
+</html>
