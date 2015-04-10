@@ -79,7 +79,7 @@ public class TiposEnergyServlet extends HttpServlet {
 		
 			case "GET": getEnergies(req, resp); break;  
 		
-			case "PUT": resp.sendError(resp.SC_METHOD_NOT_ALLOWED, "METHOD_NOT_ALLOWED"); break;  
+			case "PUT": resp.setStatus(resp.SC_METHOD_NOT_ALLOWED); break;  
 		
 			case "DELETE": removeList(req, resp); break; 
 		}
@@ -115,17 +115,15 @@ public class TiposEnergyServlet extends HttpServlet {
 		PreparedQuery pq = datastore.prepare(q);
 		Iterator<Entity> it = pq.asIterator();
 		
-		System.out.println(it);
-		
 		while(it.hasNext()){
 			Entity aux1 = it.next();
-			System.out.println(aux1);
+
 			Energy en = new Energy((String) aux1.getProperty("name"), 
 					(double) aux1.getProperty("no_fossil"), 
 					(double) aux1.getProperty("fossil"), 
 					(double) aux1.getProperty("temperature"));
 			String aux2 = gson.toJson(en); 
-			System.out.println(aux2);
+
 			jsonString.add(aux2);
 		}
 		
@@ -172,9 +170,10 @@ public class TiposEnergyServlet extends HttpServlet {
 	
 	private void getEnergy(HttpServletRequest req, HttpServletResponse resp, Entity e) 
 			throws IOException{
-		//pasar la entidad a objeto y el objeto a json y devolverla por pantalla
+
 		Gson gson = new Gson();
 		String jsonString = null;
+		
 		if(e == null){
 			resp.setStatus(resp.SC_NOT_FOUND); return;
 		}else{
@@ -196,7 +195,7 @@ public class TiposEnergyServlet extends HttpServlet {
 		
 		if(e == null){
 			resp.setStatus(resp.SC_BAD_REQUEST);
-		}else if(!(e.getProperty("name") != resource)){
+		}else if(!(e.getProperty("name").equals(resource))){
 			resp.setStatus(resp.SC_FORBIDDEN);
 		}else{//recorrer comparando los atributos y cambiar los diferentes
 
@@ -214,7 +213,7 @@ public class TiposEnergyServlet extends HttpServlet {
 			atributos.add("temperature");
 			
 			for(String aux: atributos){
-				if(e.getProperty(aux) != original.getProperty(aux)){
+				if(!(e.getProperty(aux).equals(original.getProperty(aux)))){
 					original.setProperty(aux, e.getProperty(aux));
 				}
 			}
