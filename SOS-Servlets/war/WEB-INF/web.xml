@@ -10,7 +10,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Emisiones</servlet-name>
-		<url-pattern>/emisiones/*</url-pattern>
+		<url-pattern>/api/v1/emisiones/*</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -19,7 +19,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TiposEnergia</servlet-name>
-		<url-pattern>/tiposenergias/*</url-pattern>
+		<url-pattern>/api/v1/tiposenergias/*</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -28,7 +28,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Consumos</servlet-name>
-		<url-pattern>/consumos/*</url-pattern>
+		<url-pattern>/api/v1/consumos/*</url-pattern>
 	</servlet-mapping>
 	
 	<welcome-file-list>

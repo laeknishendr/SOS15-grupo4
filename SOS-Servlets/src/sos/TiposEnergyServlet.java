@@ -28,22 +28,18 @@ public class TiposEnergyServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		process(req, resp);
-		System.out.println("doGet");
 	}
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		process(req, resp);
-		System.out.println("doPost");
 	}
 	
 	public void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		process(req, resp);
-		System.out.println("doPut");
 	}
 	
 	public void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException{
 		process(req, resp);
-		System.out.println("doDelete");
 	}
 	
 	public void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, 
@@ -70,7 +66,6 @@ public class TiposEnergyServlet extends HttpServlet {
 			
 			processResourceList(method, req, resp);
 		}
-		System.out.println("metodo process");
 		out.close();
 	}
 	
@@ -88,48 +83,53 @@ public class TiposEnergyServlet extends HttpServlet {
 		
 			case "DELETE": removeList(req, resp); break; 
 		}
-		System.out.println("processLIst");
 	}
 	
 	@SuppressWarnings("static-access")
 	private void postEnergies(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		
 		Entity e = extractEntity(req);
-		Query q = new Query ("Energy").setFilter(new FilterPredicate("name", Query.FilterOperator.EQUAL, e.getProperty("name")));
-		PreparedQuery pq = datastore.prepare(q);
-		Entity en = pq.asSingleEntity();
-		System.out.println(en);
-		System.out.println(e);
 		
 		if(e == null){
 			resp.setStatus(resp.SC_BAD_REQUEST);
-		}else if(en != null){
-			resp.setStatus(resp.SC_CONFLICT);
-		}else{System.out.println("entra");
-			datastore.put(e);
+		}else{
+			Query q = new Query ("Energy").setFilter(new FilterPredicate("name", Query.FilterOperator.EQUAL, e.getProperty("name")));
+			PreparedQuery pq = datastore.prepare(q);
+			Entity en = pq.asSingleEntity();
+			
+			if(en != null){
+				resp.setStatus(resp.SC_CONFLICT);
+			}else{
+			
+				datastore.put(e);
+			}
 		}
-		System.out.println("post lista");
-		
 	}
 	
 	private void getEnergies(HttpServletRequest req, HttpServletResponse resp) throws IOException{
-		//TODO
+
 		Gson gson = new Gson();
-		List<String> jsonString = new ArrayList<String>();  //gson.toJson(ds.values());
+		List<String> jsonString = new ArrayList<String>();  
 		
 		Query q = new Query("Energy");
 		PreparedQuery pq = datastore.prepare(q);
 		Iterator<Entity> it = pq.asIterator();
 		
+		System.out.println(it);
+		
 		while(it.hasNext()){
-			String aux = gson.toJson(it.next(), String.class); //asi va pisando las anteriores iteraciones del while, buscar metodo 
-			//(guardarlo en un mapa con clave el pais y meterle los valores solo?)	
-			//jsonString sea una List<String> y un string aux que si se pueda ir pisando?
-			jsonString.add(aux);
+			Entity aux1 = it.next();
+			System.out.println(aux1);
+			Energy en = new Energy((String) aux1.getProperty("name"), 
+					(double) aux1.getProperty("no_fossil"), 
+					(double) aux1.getProperty("fossil"), 
+					(double) aux1.getProperty("temperature"));
+			String aux2 = gson.toJson(en); 
+			System.out.println(aux2);
+			jsonString.add(aux2);
 		}
 		
 		resp.getWriter().println(jsonString);	
-		System.out.println("get lista");
 	}
 	
 	private void removeList(HttpServletRequest req, HttpServletResponse resp) throws IOException{
@@ -142,7 +142,6 @@ public class TiposEnergyServlet extends HttpServlet {
 			Entity e = it.next();
 			datastore.delete(e.getKey());
 		}
-		System.out.println("borrar lista");
 	}
 	
 	@SuppressWarnings("static-access")
@@ -167,9 +166,8 @@ public class TiposEnergyServlet extends HttpServlet {
 		
 			case "PUT": updateEnergy(req, resp, resource); break; 
 		
-			case "DELETE": removeResource(req, resp, e);/*datastore.delete(e.getKey()); System.out.println("borrar"); */break;
+			case "DELETE": removeResource(req, resp, e); break;
 		}
-		System.out.println("process elto");
 	}
 	
 	private void getEnergy(HttpServletRequest req, HttpServletResponse resp, Entity e) 
@@ -186,11 +184,8 @@ public class TiposEnergyServlet extends HttpServlet {
 					(double) e.getProperty("temperature"));
 			
 			jsonString = gson.toJson(en);
-		}
-		
-		
+		}		
 		resp.getWriter().println(jsonString);
-		System.out.println("get elto");
 	}
 	
 	@SuppressWarnings("static-access")
@@ -201,12 +196,30 @@ public class TiposEnergyServlet extends HttpServlet {
 		
 		if(e == null){
 			resp.setStatus(resp.SC_BAD_REQUEST);
-		}else if(e.getProperty("name") != resource){
+		}else if(!(e.getProperty("name") != resource)){
 			resp.setStatus(resp.SC_FORBIDDEN);
-		}else{
-			datastore.put(e);
+		}else{//recorrer comparando los atributos y cambiar los diferentes
+
+			Query q = new Query("Energy").setFilter(new FilterPredicate("name",Query.FilterOperator.EQUAL, resource));
+			PreparedQuery pq = datastore.prepare(q);
+			Entity original = pq.asSingleEntity();
+			
+			datastore.delete(original.getKey());
+			
+			//guardar atributos en una lista
+			List<String> atributos = new ArrayList<String>();
+			atributos.add("name");
+			atributos.add("no_fossil");
+			atributos.add("fossil");
+			atributos.add("temperature");
+			
+			for(String aux: atributos){
+				if(e.getProperty(aux) != original.getProperty(aux)){
+					original.setProperty(aux, e.getProperty(aux));
+				}
+			}
+			datastore.put(original);
 		}
-		System.out.println("put elto");
 	}
 	
 	private void removeResource(HttpServletRequest req, HttpServletResponse resp, Entity e){
@@ -245,10 +258,14 @@ public class TiposEnergyServlet extends HttpServlet {
 		Energy e = extractEnergy(req);
 		Entity entity = new Entity("Energy");
 		
-		entity.setProperty("name", e.name);
-		entity.setProperty("no_fossil", e.no_fossil);
-		entity.setProperty("fossil", e.fossil);
-		entity.setProperty("temperature", e.temperature);
+		if(e != null){
+			entity.setProperty("name", e.name);
+			entity.setProperty("no_fossil", e.no_fossil);
+			entity.setProperty("fossil", e.fossil);
+			entity.setProperty("temperature", e.temperature);
+		}else{
+			entity = null;
+		}
 		
 		return entity;
 	}
