@@ -3,9 +3,10 @@ package sos;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,265 +20,294 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.gson.Gson;
 
-
-@SuppressWarnings("serial")
+@
+SuppressWarnings("serial")
 public class ConsumosEnergiasServlet extends HttpServlet {
-	
-	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
- 
-	
-	
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		process(req, resp);
-	}
-	
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		process(req, resp);
-	}
-	
-	public void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		process(req, resp);
-	}
-	
-	public void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-		process(req, resp);
-	}
-	
-	public void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		/*Este método, que utilizaremos como método por
-		 * defecto para todos los comandos, tendremos que
-		 * pillar el contenido de la URL, el método
-		 * por el que se ha accedido y generar una respuesta.
-		 *
-		 * */
-		
-	/*	Consumos em = new Consumos("USA", 1685852.5, 2164458.4, 370887.55, 2009); 
-		datastore.put(em.country, em);	*/
-		
-		PrintWriter out = resp.getWriter(); 
-		String path = req.getPathInfo(); 
-		String method = req.getMethod(); 
-		
-	 
-		
-		System.out.println(req.getRequestURI()+":["+method+"|"+path+"]");
-		
-		if(path != null){
-			
-			/* En caso de que el path no sea nulo, accedemos al 
-			 * recurso en concreto. Aquí podremos hacer GET, POST y DELETE.  
-			 * 
-			 * */
-			
-			String[] pathComponents = path.split("/"); 
-			String resource = pathComponents[1];
-			
-			System.out.println("Single action over resource'"+resource+"'");
-			
-			processResource(method, pathComponents[1], req, resp ); 
-		}
-		
-		else{
-			System.out.println("Action over the list of resources");
-			processResourceList(method, req, resp );
-		}
-		
-		out.close();
-	}
-	@SuppressWarnings("static-access")
 
-	private void processResourceList(String method, HttpServletRequest req, HttpServletResponse resp) 
-			throws IOException{
-		
-		switch(method){
-		
-		case "GET": getConsumos(req, resp); break;
-		
-		case "PUT": resp.sendError(resp.SC_METHOD_NOT_ALLOWED);break;
-		
-		case "POST": postConsumos(req, resp);break; 
-		
-		case "DELETE": //datastore.delete(e.getKey());  break;//se elimina todo el contenido del mapa!
-		
-		
-		}
-	}
-	
-	private void getConsumos(HttpServletRequest req, HttpServletResponse resp) 
-			throws IOException{
-		//devolver todo el mapa
-		Query q = new Query ("Consumos");
-		PreparedQuery pq = datastore.prepare(q); 
-		Entity e = pq.asSingleEntity(); 
-		
-		Gson gson = new Gson(); 
-		resp.getWriter().println(gson.toString());
-		String consumosJson = null;
-		try {
-			consumosJson = gson.toJson(datastore.get(e.getKey()));
-		} catch (com.google.appengine.api.datastore.EntityNotFoundException e1) {
-			e1.printStackTrace();
-		} 
-		resp.getWriter().println(consumosJson);
-		resp.getWriter().println(datastore.toString()); 
-		
-	}
-	
-	@SuppressWarnings("static-access")
-	private void postConsumos(HttpServletRequest req, HttpServletResponse resp) 
-			throws IOException{
-		
-		
-		Entity e = extractEntity(req);
-		
-		if(e==null){
-			resp.setStatus(resp.SC_BAD_REQUEST);
-		}else if ((new Query("Entity").setFilter(new FilterPredicate("country",Query.FilterOperator.EQUAL,"e.name")))!=null){
-			resp.setStatus(resp.SC_CONFLICT);
-		}else{
-			datastore.put(e);
-		}
-		}
-		
-		/*if(datastore.containsKey(con)){
-			resp.setStatus(resp.SC_CONFLICT);
-		}else if (con == null){
-			resp.setStatus(resp.SC_BAD_REQUEST); 
-			resp.getWriter().println("no me vale");
-		}else{
-			datastore.put(con.country, con); 
-		}
-		
-	}
-	*/
-	
-	private Entity extractEntity(HttpServletRequest req) throws IOException{
-		
-		Consumos e = this.extractConsumos(req);
-		Entity entity = new Entity("Consumos");
-		
-		entity.setProperty("country", e.country);
-		entity.setProperty("energy_production", e.energy_production);
-		entity.setProperty("energy_use", e.energy_use);
-		entity.setProperty("energy_import", e.energy_import);
-		entity.setProperty("year", e.year);
-		
-	
-		return entity;
-	}
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-	private void processResource(String method, String resource, HttpServletRequest req, HttpServletResponse resp) 
-			throws IOException{
-		
-/*		if(method == "POST"){
-			resp.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-		}	
-		if(!datastore.containsKey(resp)) {
-			resp.setStatus(HttpServletResponse.SC_NOT_FOUND); 
-			return; 	
-		}
-								
-*/		
-		Query q = new Query ("Consumos").setFilter(new FilterPredicate("country", Query.FilterOperator.EQUAL, resource));		
-		PreparedQuery pq = datastore.prepare(q);
-		
-		Entity e = pq.asSingleEntity();
-		
-		
-		if(e == null)
-		{
-			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return;
-		}
-		
-		
-		switch(method){
-			
-		//case "GET": getConsumos(req, resp, e); break;
-			
-		//case "PUT": updateConsumos(resource, req, resp); break; 
-			
-		case "DELETE": datastore.delete(e.getKey()); break;//se elimina únicamente el resource del mapa
-			
-			
-		}
-	}
-	
-	/*private void getConsumos(HttpServletRequest req, HttpServletResponse resp, Entity e) throws IOException{
-		
-		Gson gson = new Gson(); 
-		
-		String jsonString = null;
-				try{
-					jsonString = gson.toJson(datastore.get(e.getKey()));
-				}
-				catch(EntityNotFoundException e1){
-					e1.printStackTrace();
-	}
-				
-					resp.getWriter().println(jsonString);
-		
-	}*/
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+    throws ServletException, IOException {
+        process(req, resp);
+    }
+
+    public void doPost(HttpServletRequest req, HttpServletResponse resp)
+    throws ServletException, IOException {
+        process(req, resp);
+    }
+
+    public void doPut(HttpServletRequest req, HttpServletResponse resp)
+    throws ServletException, IOException {
+        process(req, resp);
+    }
+
+    public void doDelete(HttpServletRequest req, HttpServletResponse resp)
+    throws ServletException, IOException {
+        process(req, resp);
 
 
+    }
 
-	
-	/*private void updateConsumos(String resource, HttpServletRequest req, HttpServletResponse resp) 
-			throws IOException{
-			
-		Consumos consumo = extractConsumos(req);
-			if(consumo == null){
-				resp.sendError(400);
-			}else if (consumo.country != resource){
-				resp.sendError(403); 
-			}else{
-			datastore.put(consumo.country, consumo); 
-			}
-		
-	}*/
-	
-	private Consumos extractConsumos(HttpServletRequest req) throws IOException{
-		Consumos e = null; 
-		Gson gson = new Gson(); 
-		StringBuilder sb = new StringBuilder(); 
-		BufferedReader br = req.getReader(); 
-		System.out.println("El bufferedreader dice que " + br.toString()); 
-		System.out.println("El httpservletrequest dice que " + req.getReader());
-	
-		String jsonString; 
-		
-		while((jsonString = br.readLine()) != null){
-			sb.append(jsonString);
-			
-		}
-		
-		System.out.println("el StringBuilder ahora es "+ sb);
-		System.out.println("el método del req es "+ req.getMethod());
-		
-		jsonString = sb.toString(); 
-		
-		try{
-			System.out.println("String to be parsed: <"+jsonString+">");
-			e = gson.fromJson(jsonString, Consumos.class); 
-			System.out.println("Consumos extracted: "+e+" (name = '"+e.country+", "+e.year+"')");
-		}catch(Exception ex){
-			System.out.println("ERROR parsing Consumos: ");
-				System.out.println("ERROR parsing Emission: " + ex.getMessage()); 
-			}
+    public void process(HttpServletRequest req, HttpServletResponse resp)
+    throws ServletException, IOException {
 
-		return e;
-		
-	}
-	
-	private void getConsumo(String resource, HttpServletRequest req, HttpServletResponse resp
-			) throws IOException{
-		Gson gson = new Gson(); 
-		String gsonString = gson.toJson(resource); 
-		resp.getWriter().println(gsonString);
-		
-	}
-	
-	
-	
+        PrintWriter out = resp.getWriter();
+        String path = req.getPathInfo();
+        String method = req.getMethod();
+
+        if (path != null) {
+            String[] pathComponents = path.split("/");@
+            SuppressWarnings("unused")
+            String resource = pathComponents[1];
+
+            processResource(method, pathComponents[1], req, resp);
+        } else {
+
+            processResourceList(method, req, resp);
+        }
+
+        out.close();
+    }
+
+    @
+    SuppressWarnings("static-access")
+    private void processResourceList(String method, HttpServletRequest req,
+        HttpServletResponse resp) throws IOException {
+
+        switch (method) {
+
+            case "GET":
+                getConsumos(req, resp);
+                break;
+
+            case "PUT":
+                resp.setStatus(resp.SC_METHOD_NOT_ALLOWED);
+                break;
+            case "POST":
+                postConsumos(req, resp);
+                break;
+
+            case "DELETE":
+                removeList(req, resp);
+                break;
+
+
+        }
+
+        System.out.println("processLIst");
+    }
+
+    @
+    SuppressWarnings({
+        "static-access"
+    })
+    private void postConsumos(HttpServletRequest req, HttpServletResponse resp)
+    throws IOException {
+
+        Entity e = extractEntity(req);
+
+        if (e == null) {
+            resp.setStatus(resp.SC_BAD_REQUEST);
+        } else {
+            Query q = new Query("Consumos").setFilter(new FilterPredicate("country", Query.FilterOperator.EQUAL, e.getProperty("country")));
+            PreparedQuery pq = datastore.prepare(q);
+            Entity en = pq.asSingleEntity();
+
+            if (en != null) {
+                resp.setStatus(resp.SC_CONFLICT);
+            } else {
+
+                datastore.put(e);
+            }
+        }
+    }
+
+    private void getConsumos(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        Gson gson = new Gson();
+        List < String > jsonString = new ArrayList < String > (); //gson.toJson(ds.values());
+
+        Query q = new Query("Consumos");
+        PreparedQuery pq = datastore.prepare(q);
+        Iterator < Entity > it = pq.asIterator();
+
+        while (it.hasNext()) {
+
+            Entity aux1 = it.next();
+
+            Consumos en = new Consumos((String) aux1.getProperty("country"), (Double) aux1.getProperty("energy_production"), (Double) aux1.getProperty("energy_use"), (Double) aux1.getProperty("energy_import"), (Long) aux1.getProperty("year"));
+            String aux2 = gson.toJson(en);
+
+            jsonString.add(aux2);
+        }
+
+        resp.getWriter().println(jsonString);
+
+    }
+
+
+    private void removeList(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        Query q = new Query("Consumos");
+        PreparedQuery pq = datastore.prepare(q);
+        Iterator < Entity > it = pq.asIterator();
+
+        while (it.hasNext()) {
+            Entity e = it.next();
+            datastore.delete(e.getKey());
+        }
+
+    }
+
+    private void processResource(String method, String resource,
+        HttpServletRequest req, HttpServletResponse resp)
+    throws IOException {
+
+
+        Query q = new Query("Consumos").setFilter(new FilterPredicate(
+            "country", Query.FilterOperator.EQUAL, resource));
+        PreparedQuery pq = datastore.prepare(q);
+
+        Entity e = pq.asSingleEntity();
+
+        if (method == "POST") {
+            resp.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+            return;
+        }
+
+        if (q == null) {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        switch (method) {
+
+            case "GET":
+                getConsumo(req, resp, e);
+                break;
+
+            case "PUT":
+                updateConsumos(resource, req, resp);
+                break;
+
+            case "DELETE":
+                removeResource(req, resp, e); //datastore.delete(extractEntity(req).getKey()); break;
+        }
+
+    }
+
+    @
+    SuppressWarnings("static-access")
+    private void getConsumo(HttpServletRequest req, HttpServletResponse resp, Entity e) throws IOException {
+
+        Gson gson = new Gson();
+        String jsonString = null;
+
+        if (e == null) {
+            resp.setStatus(resp.SC_NOT_FOUND);
+            return;
+        } else {
+            Consumos c = new Consumos((String) e.getProperty("country"), (double) e.getProperty("energy_production"), (double) e.getProperty("energy_use"), (double) e.getProperty("energy_import"), (Long) e.getProperty("year"));
+
+            jsonString = gson.toJson(c);
+        }
+
+
+        resp.getWriter().println(jsonString);
+    }
+
+
+    @
+    SuppressWarnings("static-access")
+    private void updateConsumos(String resource, HttpServletRequest req,
+        HttpServletResponse resp) throws IOException {
+
+        Entity e = extractEntity(req);
+
+        if (e == null) {
+            resp.setStatus(resp.SC_BAD_REQUEST);
+        } else if (e.getProperty("country") != resource) {
+            resp.setStatus(resp.SC_FORBIDDEN);
+        } else {
+            Query q = new Query("Consumos").setFilter(new FilterPredicate("country", Query.FilterOperator.EQUAL, resource));
+            PreparedQuery pq = datastore.prepare(q);
+            Entity original = pq.asSingleEntity();
+
+            datastore.delete(original.getKey());
+
+            //guardar atributos en una lista
+            List < String > atributos = new ArrayList < String > ();
+            atributos.add("country");
+            atributos.add("energy_production");
+            atributos.add("energy_use");
+            atributos.add("energy_import");
+            atributos.add("year");
+
+            for (String aux: atributos) {
+                if (!(e.getProperty(aux).equals(original.getProperty(aux)))) {
+                    original.setProperty(aux, e.getProperty(aux));
+                }
+            }
+            datastore.put(original);
+        }
+    }
+
+    @
+    SuppressWarnings("static-access")
+    private void removeResource(HttpServletRequest req, HttpServletResponse resp, Entity e) {
+
+        if (e == null) {
+            resp.setStatus(resp.SC_NOT_FOUND);
+            return;
+        } else {
+            datastore.delete(e.getKey());
+        }
+    }
+
+    private Consumos extractConsumos(HttpServletRequest req) throws IOException {
+        Consumos e = null;
+        Gson gson = new Gson();
+        StringBuilder sb = new StringBuilder();
+        BufferedReader br = req.getReader();
+        String jsonString;
+
+        while ((jsonString = br.readLine()) != null) {
+            sb.append(jsonString);
+
+        }
+        jsonString = sb.toString();
+
+        try {
+            e = gson.fromJson(jsonString, Consumos.class);
+        } catch (Exception em) {
+            System.out.println("Error parsin Emissions: " + em.getMessage());
+        }
+
+        return e;
+
+    }
+
+
+    private Entity extractEntity(HttpServletRequest req) throws IOException {
+
+        Consumos e = this.extractConsumos(req);
+        Entity entity = new Entity("Consumos");
+
+        if (e != null) {
+            entity.setProperty("country", e.country);
+            entity.setProperty("energy_production", e.energy_production);
+            entity.setProperty("energy_use", e.energy_use);
+            entity.setProperty("energy_import", e.energy_import);
+            entity.setProperty("year", e.year);
+
+        } else {
+            entity = null;
+        }
+
+        return entity;
+    }
+
+
+
+
 }
