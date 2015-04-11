@@ -10,6 +10,7 @@ package sos;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
@@ -33,7 +33,7 @@ public class EmisionesServlet extends HttpServlet {
 	DatastoreService persistance = DatastoreServiceFactory.getDatastoreService(); 
 	
 	
-	/*	mÈtodos principales (do) */
+	/*	m√©todos principales (do) */
 
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -56,9 +56,9 @@ public class EmisionesServlet extends HttpServlet {
 	
 	public void process(HttpServletRequest req, HttpServletResponse resp) 
 			throws IOException, ServletException {
-		/*Este mÈtodo, que utilizaremos como mÈtodo por
+		/*Este m√©todo, que utilizaremos como m√©todo por
 		 * defecto para todos los comandos, tendremos que
-		 * pillar el contenido de la URL, el mÈtodo
+		 * pillar el contenido de la URL, el m√©todo
 		 * por el que se ha accedido y generar una respuesta.
 		 *
 		 * */
@@ -69,11 +69,11 @@ public class EmisionesServlet extends HttpServlet {
 		
 	//	Emission yeahmision = new Emission("Spain", 9999.99, 9999, 2033);
 	//	persistance.put(yeahmision.country, yeahmision); 
-		System.out.println("Llega hasta el Process");
+		
 		if(path != null){
 			
 			/* En caso de que el path no sea nulo, accedemos al 
-			 * recurso en concreto. AquÌ podremos hacer GET, POST y DELETE.  
+			 * recurso en concreto. Aqu√≠ podremos hacer GET, POST y DELETE.  
 			 * 
 			 * */
 			
@@ -90,7 +90,7 @@ public class EmisionesServlet extends HttpServlet {
 	
 
 	
-	/* mÈtodos CRUD relacionados con la obtenciÛn de la lista de elementos del dataset
+	/* m√©todos CRUD relacionados con la obtenci√≥n de la lista de elementos del dataset
 	 * 
 	 * - GET
 	 * - POST
@@ -100,7 +100,6 @@ public class EmisionesServlet extends HttpServlet {
 	@SuppressWarnings("static-access")
 	public void processResourceList(HttpServletRequest req, HttpServletResponse resp,  String method) 
 			throws IOException{
-		System.out.println("Llega hasta el ProcessResourceList");
 		switch(method){
 		
 		case "GET": getEmissions(req, resp); System.out.println("Llega hasta el ProcessResourceList");  break;
@@ -109,66 +108,86 @@ public class EmisionesServlet extends HttpServlet {
 		
 		case "POST": postEmissions(req, resp);break; 
 		
-		case "DELETE": //persistance.delete(persistance.Query());
+		case "DELETE": removeList(req,resp); break; 
 		
 		
 		}
 	}
 	
-	//TODO
+	private void removeList(HttpServletRequest req, HttpServletResponse resp) {
+		System.out.println("En removeEmissions");
+
+		Query q = new Query("Emission"); 
+		PreparedQuery pq = persistance.prepare(q); 
+		Iterator<Entity> it = pq.asIterator(); 
+		while(it.hasNext()){
+			Entity e = it.next(); 
+			persistance.delete(e.getKey());
+		}
+		System.out.println(" -- [OK] Emisiones eliminadas con √©xito");
+	}
+
 	public void getEmissions(HttpServletRequest req, HttpServletResponse resp) 
 			throws IOException{
-		System.out.println("Estamos en el GetEmissions");
-		Gson gson = new Gson();
-		List<String> jsonString = null;  //gson.toJson(ds.values());
+		System.out.println("En GetEmissions");
 		
-		Query q = new Query("Emissions");
+		Gson gson = new Gson();
+		List<String> jsonString = new ArrayList<String>();  //gson.toJson(ds.values());
+		
+		Query q = new Query("Emission");
 		PreparedQuery pq = persistance.prepare(q);
 		Iterator<Entity> it = pq.asIterator();
-		System.out.println(" -- La query ha sido realizada con Èxito");
 		
-		if(!it.hasNext()){ System.out.println(" -- No me sale de los mismisimos entrar en el bucle xd"); }
+		System.out.println(" [OK] La query ha sido realizada con √©xito");
+		
+		if(!it.hasNext()){ System.out.println(" -- No entra en el bucle"); }
+		
 		while(it.hasNext()){
-			System.out.println(" -- Ha entrado en el bucle");
-			String aux = gson.toJson(it.next()); //asi va pisando las anteriores iteraciones del while, buscar metodo 
-			//(guardarlo en un mapa con clave el pais y meterle los valores solo?)	
-			//jsonString sea una List<String> y un string aux que si se pueda ir pisando?
-			System.out.println(" -- El obj es: "+aux);
-			jsonString.add(aux);
-			System.out.println(" -- JsonString es: "+jsonString);
+			System.out.println(" [OK] Ha entrado en el bucle");
+	        
+			Entity e = it.next();
+			Emission em = new Emission( 
+					(String) e.getProperty("country"), 
+					(Double) e.getProperty("CO2emissions"),
+					(Long)e.getProperty("population"), 
+					(Long)e.getProperty("year")); 
+				String gsonator = gson.toJson(em);	
+				jsonString.add(gsonator);
 		}
 		
-		resp.getWriter().println(jsonString);
-		 
+		resp.getWriter().println(jsonString);	 
 		
 	}
 	
 	@SuppressWarnings({ "static-access", "unused" })
 	private void postEmissions(HttpServletRequest req, HttpServletResponse resp) throws IOException{
-		//TODO
-		System.out.println("Llega hasta el PostEmissions");
-		Entity e = extractEntity(req); 
-		Query q = new Query("Emission").setFilter(new FilterPredicate("name", Query.FilterOperator.EQUAL, e.getProperty("name"))); 
-		PreparedQuery pq = persistance.prepare(q); 
-		Entity entity = pq.asSingleEntity(); 
-		System.out.println("La entidad que se ha sacado de la query es " + entity); 
-		if(e == null){ 
-			resp.setStatus(resp.SC_BAD_REQUEST); 
-		}
+		System.out.println("En postEnergies");
+		Entity e = extractEntity(req);
+		System.out.println(" [OK] La entidad extra√≠da es: " + e.toString());
+		Query q = new Query ("Emission").setFilter(new FilterPredicate("country", Query.FilterOperator.EQUAL, e.getProperty("country")));
+		System.out.println(" [OK] La query es: "+q);
+		PreparedQuery pq = persistance.prepare(q);
 		
-		else if(entity != null){ 
-			System.out.println("El error 409 es por esto so pedazo de gilipipas");
-			System.out.println("La query es: "+q);
-			resp.setStatus(resp.SC_CONFLICT); 
+		Entity en = pq.asSingleEntity();
+		
+		
+		System.out.println(" [OK] La entidad sacada de la query es: "+en);
+		
+		if(e == null){
+			resp.setStatus(resp.SC_BAD_REQUEST);
+		}else if(en != null){
+			resp.setStatus(resp.SC_CONFLICT);
 		}else{
-			persistance.put(e); 
-		} 
-		
+			System.out.println(" [OK] Ejecutando el comando POST...");
+			persistance.put(e);
+			System.out.println(" [OK] POST se ha realizado con √©xito");
 		}
+		
+		
+	}
 	
 	
-	
-	/* mÈtodos CRUD para tratamiento de elementos concretos del datase
+	/* m√©todos CRUD para tratamiento de elementos concretos del dataset
 	* - GET
 	* - PUT
 	* - DELETE
@@ -190,7 +209,7 @@ public class EmisionesServlet extends HttpServlet {
 			System.out.println("Llega hasta el ProcessResource");
 			switch(method){
 			
-			case "GET": getEmission(req, resp, e); 
+			case "GET": getEmission(req, resp, e); break;
 				
 				//getEmission(req, resp, resource); break;
 			
@@ -198,7 +217,7 @@ public class EmisionesServlet extends HttpServlet {
 			
 			case "POST": resp.sendError(resp.SC_METHOD_NOT_ALLOWED, "METHOD_NOT_ALLOWED"); break;
 						
-			case "DELETE": persistance.delete(e.getKey());
+			case "DELETE": removeResource(req, resp,e); break;   
 			
 			
 			}
@@ -211,40 +230,68 @@ public class EmisionesServlet extends HttpServlet {
 		Emission em = new Emission( 
 			(String) e.getProperty("country"), 
 			(Double) e.getProperty("CO2emissions"),
-			(Integer)e.getProperty("population"), 
-			(Integer)e.getProperty("year")); 
-		
+			(Long)e.getProperty("population"), 
+			(Long)e.getProperty("year")); 
+		System.out.println("Crea la entidad");
 		Gson gson = new Gson(); 
-		String gsonString = null;
-		
-		gsonString = gson.toJson(em); 
-	
-		
+		String gsonString = gson.toJson(em);	
 		resp.getWriter().println(gsonString);
+		System.out.println("Petici√≥n a recurso realizada con √©xito");
 		
 	}
 	
+	@SuppressWarnings("static-access")
 	private void updateEmission(HttpServletRequest req, HttpServletResponse resp, String resource) 
 			throws IOException{
-		//TODO
+		
+			System.out.println("En UpdateEmission");
 			Entity emission = extractEntity(req);
 			
 			if(emission == null){
-				resp.sendError(400);
-			}else if (emission.getProperty("country")!= resource){
-				resp.sendError(403); 
+				resp.setStatus(resp.SC_BAD_REQUEST);
+			}else if (!(emission.getProperty("country").equals(resource))){
+				resp.setStatus(resp.SC_FORBIDDEN);
+				
 			}else{
-			persistance.put(emission); 
+				System.out.println(" -- [OK] Emisi√≥n extra√≠da con √©xito");
+				Query q = new Query("Emission").setFilter(new FilterPredicate("country",Query.FilterOperator.EQUAL, resource));
+				PreparedQuery pq = persistance.prepare(q);
+				Entity original = pq.asSingleEntity();
+				persistance.delete(original.getKey());
+				List<String> atributos = new ArrayList<String>(); 
+				atributos.add("country"); 
+				atributos.add("CO2emissions");
+				atributos.add("population");
+				atributos.add("year");
+				System.out.println(" -- [OK] Emisi√≥n actualizada creada con √©xito");
+				
+				for(String a:atributos){
+					if(!(emission.getProperty(a).equals(original.getProperty(a))))
+						original.setProperty(a, emission.getProperty(a));	
+				}
+				System.out.println(" -- Prepar√°ndose para actualizar la emisi√≥n...");
+				persistance.put(original);
+				System.out.println(" -- [OK] Emisi√≥n actualizada con √©xito");
+				
+				
 			}
 		
 	}
+	@SuppressWarnings("static-access")
+	private void removeResource(HttpServletRequest req, HttpServletResponse resp, Entity e){
+		
+		if(e == null){
+			resp.setStatus(resp.SC_NOT_FOUND); return;
+		}else{
+			persistance.delete(e.getKey());
+		}
+	}
 	
 	
-	
-	//mÈtodo general para obtener emisiones transferidas via JSON
+	//m√©todo general para obtener emisiones transferidas via JSON
 	
 	private Emission extractEmission(HttpServletRequest req) throws IOException{
-		System.out.println("Estamos en el ExtractEmission"); 
+		System.out.println(" -- En extractEmission"); 
 		Emission e = null; 
 		Gson gson = new Gson(); 
 		StringBuilder sb = new StringBuilder(); 
@@ -258,28 +305,27 @@ public class EmisionesServlet extends HttpServlet {
 			
 		}
 		
-		System.out.println(" -- el StringBuilder es "+ sb);
-		System.out.println(" -- el mÈtodo del req es "+ req.getMethod());
+		System.out.println(" ---- [OK] el StringBuilder es "+ sb);
+		System.out.println(" ---- [OK] el m√©todo del req es "+ req.getMethod());
 		
 		jsonString = sb.toString(); 
 		
 		try{
-			System.out.println(" -- String to be parsed: <"+jsonString+">");
+			System.out.println(" ---- [OK] String to be parsed: <"+jsonString+">");
 			e = gson.fromJson(jsonString, Emission.class); 
 			
-			System.out.println(" -- Emission extracted: "+e+" (name = '"+e.country+", "+e.year+"')");
-			System.out.println(" -- EmisiÛn extraÌda con Èxito"); 
+			System.out.println(" ---- [OK] Emission extracted: "+e+" (name = '"+e.country+", "+e.year+"')");
+			System.out.println(" ---- [OK] Emisi√≥n extra√≠da con √©xito"); 
 		}catch(Exception ex){
-			System.out.println(" -- ERROR parsing Emison: ");
-				System.out.println(" -- ERROR parsing Emission: " + ex.getMessage()); 
+			System.out.println(" ---- [ERROR] ERROR parsing Emison: ");
+				System.out.println(" ---- [ERROR] ERROR parsing Emission: " + ex.getMessage()); 
 			}
 		return e; 
 		
 		
 	}
 	
-	private Entity extractEntity(HttpServletRequest req) throws IOException{
-		System.out.println("Llega al ExtractEntity"); 
+	private Entity extractEntity(HttpServletRequest req) throws IOException{ 
 
 		Emission e = extractEmission(req); 
 		
@@ -288,7 +334,7 @@ public class EmisionesServlet extends HttpServlet {
 		ee.setProperty("CO2emissions", e.CO2emissions); 
 		ee.setProperty("population", e.population);
 		ee.setProperty("year",e.year);
-		System.out.println(" -- La emisiÛn quedarÌa tal que: "+ ee.toString()); 
+		 
 		return ee; 
 	}
 	
