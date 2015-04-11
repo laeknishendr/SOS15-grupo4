@@ -4,11 +4,11 @@ public class Emission {
 	
 	String country; 
 	Double CO2emissions; 
-	Integer population; 
-	Integer year;
+	Long population; 
+	Long year;
 	
-	public Emission(String country, Double cO2emissions, Integer population,
-			Integer year) {
+	public Emission(String country, Double cO2emissions, Long population,
+			Long year) {
 		super();
 		this.country = country;
 		CO2emissions = cO2emissions;
@@ -24,3 +24,4 @@ public class Emission {
 	
 
 }
+
