@@ -3,7 +3,7 @@ $( document ).ready(function() {
 		var cadena ="";
 		var dir = $("#url").val();   //coge la url
 		var datos = "{}";
-		var metodo = $(this).val();    //coge el tipo de metodo
+		var metodo = $('input[name=method]:checked').val();    //coge el tipo de metodo
 		
 		console.log("dir: "+dir);			      
 		console.log("datos1: "+datos);
