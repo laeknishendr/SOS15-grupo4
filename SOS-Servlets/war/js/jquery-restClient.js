@@ -19,7 +19,7 @@ $( document ).ready(function() {
 			method: metodo,
 			url: dir,
 			data: datos
-		}).done(function( msg ) {
+		}).done(function( data ) {
 			$( "#list" ).html( data );
 		});
 	})
