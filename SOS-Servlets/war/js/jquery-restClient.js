@@ -15,17 +15,12 @@ $( document ).ready(function() {
 			console.log("datos2: "+datos);
 		}
 		
-		$.get(dir, function( data ) {
-		  $( "#list" ).html( data );
-		});
-		var jqxhr = $.get(dir, function() {
-			alert( "success" );
-		}).done(function(data, status) {
-		    alert( "second success" );
-		}).fail(function(data, status) {
-		    alert( "error" );
-		}).always(function() {
-		    alert( "finished" );
+		$.ajax({
+			method: metodo,
+			url: dir,
+			data: datos
+		}).done(function( msg ) {
+			$( "#list" ).html( data );
 		});
 	})
 })
