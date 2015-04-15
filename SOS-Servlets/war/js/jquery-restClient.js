@@ -1,6 +1,6 @@
 $( document ).ready(function() {
 	$("#button").on("click", function(){
-		var cadena ="";
+
 		var dir = $("#url").val();   //coge la url
 		var datos = "{}";
 		var metodo = $('input[name=method]:checked').val();    //coge el tipo de metodo
