@@ -168,6 +168,7 @@ public class TiposEnergyServlet extends HttpServlet {
 		}
 	}
 	
+	@SuppressWarnings("static-access")
 	private void getEnergy(HttpServletRequest req, HttpServletResponse resp, Entity e) 
 			throws IOException{
 
@@ -221,8 +222,9 @@ public class TiposEnergyServlet extends HttpServlet {
 		}
 	}
 	
+	@SuppressWarnings("static-access")
 	private void removeResource(HttpServletRequest req, HttpServletResponse resp, Entity e){
-		
+		System.out.println(e);
 		if(e == null){
 			resp.setStatus(resp.SC_NOT_FOUND); return;
 		}else{
