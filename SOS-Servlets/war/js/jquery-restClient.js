@@ -1,6 +1,7 @@
 $( document ).ready(function() {
 	$("#button").on("click", function(){
-
+		
+		var statuscode = "{}";
 		var dir = $("#url").val();   //coge la url
 		var datos = "{}";
 		var metodo = $('input[name=method]:checked').val();    //coge el tipo de metodo
@@ -19,8 +20,10 @@ $( document ).ready(function() {
 			method: metodo,
 			url: dir,
 			data: datos
-		}).done(function( data ) {
+		}).done(function( data, status, jqXHR ) {
 			$( "#list" ).html( data );
+			statuscode = jqXHR.status;
+			$("#status").html(statuscode);
 		});
 	})
 })
