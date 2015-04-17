@@ -16,14 +16,23 @@ $( document ).ready(function() {
 			console.log("datos2: "+datos);
 		}
 		
-		$.ajax({
-			method: metodo,
-			url: dir,
-			data: datos
-		}).done(function( data, status, jqXHR ) {
-			$( "#list" ).html( data );
-			statuscode = jqXHR.status;
-			$("#status").html(statuscode);
-		});
+		if (metodo == "DELETE"){
+			$.ajax({
+				method: metodo,
+				url: dir,
+			}).done(function( status, jqXHR ) {
+				statuscode = jqXHR.status;
+				$("#status").html(statuscode);
+		}else{
+			$.ajax({
+				method: metodo,
+				url: dir,
+				data: datos
+			}).done(function( data, status, jqXHR ) {
+				$( "#list" ).html( data );
+				statuscode = jqXHR.status;
+				$("#status").html(statuscode);
+			});
+		}
 	})
 })
