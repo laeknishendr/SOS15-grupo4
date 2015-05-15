@@ -56,11 +56,13 @@ public class ConsumosEnergiasServlet extends HttpServlet {
         String method = req.getMethod();
 
         if (path != null) {
-            String[] pathComponents = path.split("/");@
-            SuppressWarnings("unused")
-            String resource = pathComponents[1];
-
-            processResource(method, pathComponents[1], req, resp);
+            String[] pathComponents = path.split("/");
+            String resource = "";
+			if(pathComponents.length>=2){
+				resource = pathComponents[1];
+			}
+			
+			processResource(method, resource, req, resp);
         } else {
 
             processResourceList(method, req, resp);

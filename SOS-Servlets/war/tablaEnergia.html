@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Tablas de datos</title>
+
+<script src="js/jquery-2.1.3.min.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/jquery.dataTables.js"></script>
+<link type="text/css" href="css/jquery.dataTables.css"></link>
+
+<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
+
+</head>
+
+<body>
+
+	<button type="button" id="Post">Añadir</button>
+	<button type="button" id="Put">Editar</button>
+	<button type="button" id="Delete">Borrar dato</button>
+	<button type="button" id="DeleteAll">Borrar base de datos</button>
+
+<!--  
+	<div class="container">
+		<table id="example"></table>
+	</div>
+-->
+	<table id="tablaEnergia" class="display" cellspacing="0" width="100%">
+		<thead>
+			<tr>
+				<th>Country</th>
+				<th>No_fossil</th>
+				<th>Fossil</th>
+				<th>Temperature</th>
+			</tr>
+		</thead>
+
+		<tfoot>
+			<tr>
+				<th>Country</th>
+				<th>No_fossil</th>
+				<th>Fossil</th>
+				<th>Temperature</th>
+			</tr>
+		</tfoot>
+
+		<tbody id="energia"></tbody>
+	</table>  
+	<script src="js/jqueryTablaEnergia.js"></script>
+</body>
+</html>

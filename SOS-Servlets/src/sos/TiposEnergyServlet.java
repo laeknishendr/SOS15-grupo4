@@ -57,10 +57,12 @@ public class TiposEnergyServlet extends HttpServlet {
 		
 		if(path != null){
 			String[] pathComponents = path.split("/");
-			@SuppressWarnings("unused")
-			String resource = pathComponents[1];
+			String resource = "";
+			if(pathComponents.length>=2){
+				resource = pathComponents[1];
+			}
 			
-			processResource(method, pathComponents[1], req, resp);
+			processResource(method, resource, req, resp);
 			
 		}else{
 			
