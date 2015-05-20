@@ -1,19 +1,23 @@
-<!DOCTYPE HTML>
+		<!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>SOS - Grupo 4</title>
-    <link href = "/css/bootstrap.min.css" rel = "stylesheet">
-    <link rel="stylesheet" href="/css/bootstrap-custom.css">
-    <link rel="stylesheet" href="/css/dataTables.bootstrap.css">
-    <link rel="stylesheet" href="css/animate.css">
-    
-  	<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
- 
-  </head>
+<head>
 
-  <body>  
-  <div class="jumbotron">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="/js/chartconsumos.js"></script>
+<link href = "/css/bootstrap.min.css" rel = "stylesheet">
+<link rel="stylesheet" href="/css/bootstrap-custom.css">
+<link rel="stylesheet" href="css/animate.css"> 
+<title>SOS - Group 4</title>  
+
+
+</head>
+
+
+<body>
+<div class="jumbotron">
 	<div class = "container">
 		<div class="caption">
   			<h1 id = "logo" >SOS - Group 4</h1>
@@ -78,52 +82,20 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-  
-  
-  
-  
-  	<a type="button" id="Post" href="formularioPostConsumo.html">Añadir</a>
-	<a type="button" id="Put" href="formularioPutConsumo.html">Editar</a>
-  	<button type="button" id="Delete">Borrar dato</button>
-  	<button type="button" id="DeleteAll">Borrar base de datos</button>
-    
-    <table id="tablaConsumo" class="display" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Country</th>
-                <th>Energy production</th>
-                <th>Energy use</th>
-                <th>Energy import</th>
-                <th>Year</th>
-            </tr>
-        </thead>
- 
-        <tfoot>
-            <tr>
-                <th>Country</th>
-                <th>Energy production</th>
-                <th>Energy use</th>
-                <th>Energy import</th>
-                <th>Year</th>
-            </tr>
-        </tfoot>
-        <tbody id="consumo"></tbody>
-   </table>
+
    
-    <!-- Bootstrap core JavaScript
+	<div id="charts"></div>
+
+
+     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src = "/js/jquery-index.js"></script>
-    <script src="js/jquery-2.1.3.min.js"></script>
-    <script src="js/jquery.js"></script>
-    <script src="js/jquery.dataTables.js"></script>
-    <script src="js/jqueryTablaConsumo.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug 
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>-->
     
-    -->
-   
-  </body>
+</body>
 </html>
+

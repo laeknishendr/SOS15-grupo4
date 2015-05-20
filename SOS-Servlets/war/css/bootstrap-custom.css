@@ -7,6 +7,10 @@
  margin-top: 35px;
 }
 
+body{
+	background-color:#7FAC71;
+}
+
 #headertext{margin-top: 20px;}
 
 
@@ -34,6 +38,20 @@
 @font-face {
    	font-family: "danielbd";
    	src: url(/fonts/danielbd.ttf) ;
+}
+@font-face {
+   	font-family: "cashew";
+   	src: url(/fonts/Cashew.ttf) ;
+}
+
+p{
+	font-family: "cashew";
+	font-size:30px; 
+}
+
+h1{
+	font-family:"cashew"; 
+	font-size:40px;
 }
   
 .jumbotron{
