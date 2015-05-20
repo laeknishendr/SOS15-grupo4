@@ -1,26 +1,48 @@
-.jumbotron .h1, .jumbotron h1 {
-  color: #575B54;
-  text-align: center;
+#logo{
+ visibility: visible; 
+ -webkit-animation-duration: 700ms; 
+ -webkit-animation-delay: 500ms; 
+ text-align: center;  
+ font-family:danielbd;
+ margin-top: 35px;
 }
 
+#headertext{margin-top: 20px;}
+
+
+.navbar {
+   background-color: #000000; 
+   opacity: 0.75; 
+   navbar-height: 15px;
+   margin-bottom: 20px;
+}
+
+.navbar-brand{
+	font-family:danielbd; 
+	opacity: 1; 
+	color: #F4F4F4; 	
+}
+
+.navbar li { color: #000 } 
+
+
+#headertext{
+	text-align:center; 
+	font-family:danielbd; 
+	color:#575b54;
+}
 @font-face {
-    	font-family: "danielbd";
-    	src: url(/fonts/danielbd.ttf) ;
+   	font-family: "danielbd";
+   	src: url(/fonts/danielbd.ttf) ;
 }
-	
-h1{ 
-    font-family:danielbd;
-    position:relative;   
-}
-    
+  
 .jumbotron{
    	position:relative; 
    	background:#000 url("../sos-background.png") center center; 
    	width:100%; 
    	height:50%; 
    	background-size:cover; 
-   	overflow:hidden; 
-    
+   	overflow:hidden;  
 }
 
 

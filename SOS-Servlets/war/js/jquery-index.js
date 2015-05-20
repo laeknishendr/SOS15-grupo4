@@ -1,5 +1,12 @@
 $(document).ready(function() {
-    $(".logo").click(function(){
-    	$(this).fadeOut('slow');
-    }
+	$(document).ready(function(){
+    	$('.logo').fadeIn('slow'); 
+    	$('.headertext').slideDown('slow'); 
+	});
 });
+
+$('#tabla').hover(function(){
+	$('#tab-drop').slideDown(); 
+}, function(){
+	$('#tab-drop').slideUp(); 
+})

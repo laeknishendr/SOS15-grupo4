@@ -77,8 +77,13 @@ public class EmisionesServlet extends HttpServlet {
 			 * 
 			 * */
 			
-			String[] resource = path.split("/"); 
-			processResource(req, resp, resource[1], method); System.out.println("Llega hasta el Process");
+			String[] pathComponents = path.split("/");
+			String resource = "";
+			if(pathComponents.length>=2){
+				resource = pathComponents[1];
+			}
+			
+			processResource(req, resp, resource, method); System.out.println("Llega hasta el Process");
 		}
 		
 		else{

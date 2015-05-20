@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <!-- The HTML 4.01 Transitional DOCTYPE declaration-->
 <!-- above set at the top of the file will set     -->
@@ -10,95 +11,81 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name = "viewport" content = "width=device-width, initial-scale = 1">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src = "/js/bootstrap.min.js"></script>
-    <script src = "/js/jquery-index.js"></script>
+    
+    
     <!-- Bootstrap core CSS -->
 
     <title>SOS - Grupo 4</title>
     
     <link href = "/css/bootstrap.min.css" rel = "stylesheet">
     <link rel="stylesheet" href="/css/bootstrap-custom.css">
-    <script src="help.html"></script>
-    <script src="restClient.html"></script>
-    <script>
-	$(document).ready(function(){
-    	$('.caption').fadeIn(); 
-	});
-	</script>
+    <link rel="stylesheet" href="css/animate.css">
+
+    
     
     
   </head>
 
   <body>
   
-  
-
-
 <div class="jumbotron">
 	<div class = "container">
-
-  <div class="caption">
-  		<h1 class = "logo"><span>SOS - Grupo 4</span></h1>
-  </div>
-</div>
+		<div class="caption">
+  			<h1 id = "logo" data-wow-duration="700ms" data-wow-delay="500ms" class="wow bounceInDown animated animated">SOS - Grupo 4</h1>
+  		</div>
+  		<div>
+  			<p id = "headertext" class = "wow slideInLeft animated animated">¡Bienvenido a nuestro proyecto!<p>
+		</div>
+	</div>
 </div>
  
   <div class = "imagen">
   
   </div>
-  
-    <!-- <div>
-  <nav class="navbar navbar-inverse navbar-fixed-top">
+       
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+            <span class="sr-only">Toggle navigation</span>   
           </button>
-   -->
-         <!-- <a class="navbar-brand" href="#">Grupo 4 SOS</a> --> 
-        
-       <div class="container" data-spy="affix" data-offset-top="400" id="nav">
-    <div class="navbar">
-        <div class="navbar-inner">
-            <div class="container">
-                <div class="span12">
-                    <a class="brand" href="#">Home</a>
-                     <ul class="nav">
-                         <li ><a href="/api/v1/emisiones"">Emisiones</a></li>
-            				<li><a href="/api/v1/tiposenergias">Tipos de energías</a></li>
-           					<li><a href="/api/v1/consumos">Consumo de energía</a></li>
-            				<li><a href = "restClient.html">Cliente REST</a>
-            				<li><a href = "help.html">Ayuda</a>
-                     </ul>
-                </div>
-            </div> 
-        </div> 
-    </div> 
-</div> 
-        
-    <!-- 
+          <a class="navbar-brand" href="#" >Grupo 4</a>
         </div>
-        <div id="navbar" class="navbar affix-top" data-spy="affix">
+        <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#"">Inicio</a></li>
-            <li ><a href="/api/v1/emisiones"">Emisiones</a></li>
-            <li><a href="/api/v1/tiposenergias">Tipos de energías</a></li>
-            <li><a href="/api/v1/consumos">Consumo de energía</a></li>
-            <li><a href = "restClient.html">Cliente REST</a>
-            <li><a href = "help.html">Ayuda</a>
+          	<li>
+			  <a id="dropdownMenu1" href="#" class="sr-only dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="width: 100%;height: 50px;">
+			  Servlets
+			  <span class="caret"></span>
+			  </a>
+			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			    <li ><a href="/api/v2/emisiones">Emisiones</a></li>
+       	  		<li><a href="/api/v2/tiposenergias">Tipos de energías</a></li>
+      			<li><a href="/api/v2/consumos">Consumo de energía</a></li>
+			  </ul>
+            </li>
+            <li>
+			  <a id="dropdownMenu1" href="#" class="sr-only dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="width: 100%;height: 50px;">
+			  Tablas<span class="caret"></span>
+			  </a>
+			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			  
+			    <li><a href="tablaEnergia.html">Tabla de energias</a></li>
+    			<li><a href="tablaConsumo.html">Tablas de consumos</a></li>
+			    <li ><a href="tablaEmisiones.html">Tabla de emisiones</a></li>
+			  </ul>
+            </li>
+            <li><a href = "restClient.html">Cliente REST</a></li>
+            <li><a href = "help.html">Ayuda</a></li>
+            
           </ul>
-        </div><!--/.nav-collapse 
+          
+        </div><!--/.nav-collapse -->
       </div>
-    </nav>
-   -->    
+    </nav>  
   <div class="container">
-	<hr/>
-	<hr/>
-	<hr/>
+	
       <div class="starter-template">
         <h1>¡Hola! Somos el grupo 4 de la asignatura SOS. </h1>
       	<p> Utiliza la barra de arriba para acceder a los servlets. También puedes consultar el manual de usuario y utilizar nuestro cliente REST.</p>
@@ -116,10 +103,60 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src = "/js/jquery-index.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug 
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    
     -->
     
    </div>
     
   </body>
+<!--  
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
+<!-- above set at the top of the file will set     -->
+<!-- the browser's rendering engine into           -->
+<!-- "Quirks Mode". Replacing this declaration     -->
+<!-- with a "Standards Mode" doctype is supported, -->
+<!-- but may lead to some differences in layout.   
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>SOS - Grupo 4</title>
+    <script src="help.html"></script>
+    <script src="restClient.html"></script>
+    <script src="tablaEnergia.html"></script>
+    <script src="tablaConsumo.html"></script>
+    
+  </head>
+
+  <body>
+    <h1>¡Hola! Somos el grupo 4 de la asignatura SOS.</h1>
+	
+	<h2>Available Servlets:</h2>
+	
+    <ul>
+     
+        <li><a href="/api/v1/emisiones">Emisiones</a></li>
+      
+        <li><a href="/api/v1/tiposenergias">Tipos de energias</a></li>
+
+        <li><a href="/api/v1/consumos">Consumo de energía</a></li>
+    
+    </ul>
+    
+    <h2>Otros:</h2>
+    
+    	<p><a href="help.html">Manual de usuario</a></p>
+    
+    	<p><a href="restClient.html">Rest Client</a></p>
+    	
+    	<p><a href="tablaEnergia.html">Tablas de datos</a></p>
+    	
+    	<p><a href="tablaConsumo.html">Tablas de datos 2</a></p>
+    
+  </body>
+-->

@@ -57,10 +57,12 @@ public class TiposEnergyServlet extends HttpServlet {
 		
 		if(path != null){
 			String[] pathComponents = path.split("/");
-			@SuppressWarnings("unused")
-			String resource = pathComponents[1];
+			String resource = "";
+			if(pathComponents.length>=2){
+				resource = pathComponents[1];
+			}
 			
-			processResource(method, pathComponents[1], req, resp);
+			processResource(method, resource, req, resp);
 			
 		}else{
 			
@@ -119,9 +121,9 @@ public class TiposEnergyServlet extends HttpServlet {
 			Entity aux1 = it.next();
 
 			Energy en = new Energy((String) aux1.getProperty("name"), 
-					(double) aux1.getProperty("no_fossil"), 
-					(double) aux1.getProperty("fossil"), 
-					(double) aux1.getProperty("temperature"));
+					(Double) aux1.getProperty("no_fossil"), 
+					(Double) aux1.getProperty("fossil"), 
+					(Double) aux1.getProperty("temperature"));
 			String aux2 = gson.toJson(en); 
 
 			jsonString.add(aux2);
