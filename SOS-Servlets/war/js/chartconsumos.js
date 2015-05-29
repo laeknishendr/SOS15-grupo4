@@ -5,7 +5,7 @@ google.load('visualization','1.0',{'packages':['corechart']});
 		function dibujar()
 		{ 
 			var request = $.ajax({
-				url: "/api/v1/consumos", //http://sos-2015-04.appspot.com
+				url: "/api/v2/consumos", //http://sos-2015-04.appspot.com
 				type: "GET",
 				dataR: $("#payload").val()
 			});
