@@ -3,15 +3,90 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Manual de usuario</title>
-    <style type="text/css">
-    	h1 {text-align: center; font-size: 50px; text-decoration: underline}
-    	h2 {color:blue; font-size: 30px; margin-left: 50px; margin-right: 35px; border-bottom: solid}
-    	h3 {font-size: 30px; margin-left: 65px; font-style: italic}
-    	p {font-size: 25px; margin-left: 70px; margin-right: 35px}
-    </style>
+    <link href = "/css/bootstrap.min.css" rel = "stylesheet">
+    <link rel="stylesheet" href="/css/bootstrap-custom.css">
+    <link rel="stylesheet" href="css/animate.css">
   </head>
 
   <body>
+  <div class="jumbotron">
+	<div class = "container">
+		<div class="caption">
+  			<h1 id = "logo" >SOS - Group 4</h1>
+  		</div>
+  		<div>
+  			<p id = "headertext">Welcome to our project!<p>
+		</div>
+	</div>
+</div>
+ 
+  <div class = "imagen">
+  
+  </div>
+  
+<nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>   
+          </button>
+          <a class="navbar-brand" href="/index.html" >Group 4</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+          	<li>
+			  <a id="dropdownMenu1" href="#" class="sr-only dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="width: 100%;height: 50px;">
+			  Servlets
+			  <span class="caret"></span>
+			  </a>
+			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			    <li ><a href="/api/v2/emisiones">Emissions</a></li>
+       	  		<li><a href="/api/v2/tiposenergias">Energy types</a></li>
+      			<li><a href="/api/v2/consumos">Energy consumption</a></li>
+			  </ul>
+            </li>
+            <li>
+			  <a id="dropdownMenu1" href="#" class="sr-only dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="width: 100%;height: 50px;">
+			  Tables<span class="caret"></span>
+			  </a>
+			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			  
+			    <li><a href="tablaEnergia.html">Energy tables</a></li>
+    			<li><a href="tablaConsumo.html">Consumption tables</a></li>
+			    <li ><a href="tablaEmisiones.html">Emission tables</a></li>
+			  </ul>
+            </li>
+            
+            	<li>
+			  <a id="dropdownMenu1" href="#" class="sr-only dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="width: 100%;height: 50px;">
+			  Charts	
+			  <span class="caret"></span>
+			  </a>
+			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			    <li ><a href="chartsEmisiones.html">Emission charts</a></li>
+       	  		<li><a href="chartsTiposEnergias.html">Energy sources charts</a></li>
+      			<li><a href="chartsConsumos.html">Consumptions charts</a></li>
+			  </ul>
+            </li>
+            
+            <li>
+			  <a id="dropdownMenu1" href="#" class="sr-only dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="width: 100%;height: 50px;">
+			  Chars externos
+			  <span class="caret"></span>
+			  </a>
+			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			    <li><a href="papamoscas.html">API EXTERNA-Papamoscas charts</a></li>
+      			<li><a href="mariajoseexterno.html">API EXTERNA-Mariajose charts</a></li>
+			  </ul>
+            </li>
+            <li><a href = "restClient.html">REST Client</a></li>
+            <li><a href = "help.html">Help</a></li>
+            
+          </ul>
+          
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav> 
     <h1>Manual de usuario</h1>
 	
 	<div>
@@ -52,6 +127,19 @@
 				<p>Si el elemento no está en la base de datos, el servidor devolverá un error <I>404, NOT FOUND</I>. Si no, el servidor 
 				devolverá <I>200 OK</I> y borrará el elemento de la base de datos.</p>
 	</div>    
+    
+     <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src = "/js/jquery-index.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug 
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    
+    -->
+    
+   </div>
     
   </body>
 </html>
