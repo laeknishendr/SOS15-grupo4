@@ -17,7 +17,7 @@ public class PapamoscasProxyServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			URL myURL = new URL("http://papamoscas-isa.appspot.com/api/v3/birds?user=proUser1");
+			URL myURL = new URL("http://papamoscas-isa.appspot.com/api/v4/birds?user=proUser1");
 			BufferedReader in = new BufferedReader(new InputStreamReader(myURL.openStream()));
 			 String inputLine;
 			 while ((inputLine = in.readLine()) != null){

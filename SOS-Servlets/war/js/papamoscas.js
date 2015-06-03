@@ -30,7 +30,7 @@ function dibujar() {
 		}
 
 		var opciones = {
-			'title' : 'fossil in Country',
+			'title' : 'Papamoscas',
 			'width' : 800,
 			'height' : 600,
 			backgroundColor : {
