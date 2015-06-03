@@ -41,6 +41,24 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>ServletCSVConsumo</servlet-name>
+		<servlet-class>sos.ServletCSVConsumo</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ServletCSVConsumo</servlet-name>
+		<url-pattern>/api/v2/servletCSVConsumo/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ServletCSVEmission</servlet-name>
+		<servlet-class>sos.ServletCSVEmission</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ServletCSVEmission</servlet-name>
+		<url-pattern>/api/v2/servletCSVEmission/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>PapamoscasProxy</servlet-name>
 		<servlet-class>sos.PapamoscasProxyServlet</servlet-class>
 	</servlet>

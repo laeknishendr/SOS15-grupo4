@@ -4,6 +4,8 @@ $(document).ready(function() {
 	
 	var dir = "api/v2/consumos";
 	
+	var uri = "api/v2/servletCSVConsumo";
+	
 	//GET
 	var aaData = [];
 
@@ -57,4 +59,15 @@ $(document).ready(function() {
 		});
 	});
 		
+	
+	//CSV
+	
+	$('#CSV').click(function(){
+		$.ajax({
+			url: uri,
+			type:"GET"
+		}).done(function(data, status, jqXHR){
+			window.location.reload();
+		});
+	});
 });

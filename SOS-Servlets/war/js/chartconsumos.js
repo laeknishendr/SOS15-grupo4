@@ -34,7 +34,12 @@ google.load('visualization','1.0',{'packages':['corechart']});
 				
 				var opciones = {'title':'energy_use in country',
 								'width': 800,
-								'height':600};
+								'height':600,
+								backgroundColor : {
+									fill : 'transparent'
+								}
+								
+				};
 				var grafica = new google.visualization.GeoChart(document.getElementById('charts'));
 				grafica.draw(data, opciones);
 			});

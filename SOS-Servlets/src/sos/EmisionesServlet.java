@@ -160,7 +160,7 @@ public class EmisionesServlet extends HttpServlet {
 				jsonString.add(gsonator);
 		}
 		
-		//resp.getWriter().println(jsonString);	 
+		resp.getWriter().println(jsonString);	 
 		
 	}
 	
