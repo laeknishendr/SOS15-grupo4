@@ -11,6 +11,37 @@ body{
 	background-color:#7FAC71;
 }
 
+
+hr{
+	opacity: 0; 
+}
+
+.btn{
+	background: #7FAC71;
+	color: #f7f7f7; 
+	font-family:"terminal"; 
+	font-size: 20px;
+}
+
+#tablaso{
+    background: #a1c497;
+}
+
+#tables{
+	background-color: #d4e8b7;
+    opacity: 0.9;
+    border-radius: 10px;
+    padding: 2%;
+    margin-top: 4%;
+    margin-bottom:4%;
+}
+
+
+
+.btn:hover{
+	background: #3b682c;
+	color: #ffffff
+}
 #headertext{margin-top: 20px;}
 
 
@@ -27,7 +58,7 @@ body{
 	color: #F4F4F4; 	
 }
 
-.navbar li { color: #000 } 
+.navbar li { color: #000; font-family:"terminal"; font-size:20px;} 
 
 
 #headertext{
@@ -44,6 +75,11 @@ body{
    	src: url(/fonts/Cashew.ttf) ;
 }
 
+@font-face {
+   	font-family: "terminal";
+   	src: url(/fonts/TerminalDosis-Light.ttf) ;
+}
+
 p{
 	font-family: "cashew";
 	font-size:30px; 
@@ -53,7 +89,15 @@ h1{
 	font-family:"cashew"; 
 	font-size:40px;
 }
+
+label{
+	font-family:"terminal";
+	size:25px;
+}
   
+.dataTables_info, .dataTables_paginate{
+	font-family:"terminal"; 
+}
 .jumbotron{
    	position:relative; 
    	background:#000 url("../sos-background.png") center center; 

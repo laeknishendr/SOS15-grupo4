@@ -23,9 +23,7 @@
 	</div>
 </div>
  
-  <div class = "imagen">
-  
-  </div>
+ 
   
 <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
@@ -92,15 +90,19 @@
       </div>
     </nav> 
   
-  	<button type="button" id="Post" onClick=window.location.href="formularioPostEmisiones.html">Añadir</button>
-	<button type="button" id="Put" onClick=window.location.href="formularioPutEmisiones.html">Editar</button>
-	<button type="button" id="Delete">Borrar dato</button>
-	<button type="button" id="DeleteAll">Borrar base de datos</button>
-	<button type="button" id="CSV">Importar CSV</button>
-    
-    <table id="tablaEmisiones" class="display" cellspacing="0" width="100%">
+<div id = "tables" class="container">
+<div class = "btn-group" style = "margin-left:1.2%">
+  	<button type="button" class = "btn " id="Post" onClick=window.location.href="formularioPostEmisiones.html">Add</button>
+	<button type="button" class = "btn " id="Put" onClick=window.location.href="formularioPutEmisiones.html">Edit</button>
+	<button type="button" class = "btn " id="Delete">Delete input</button>
+	<button type="button" class = "btn "  id="DeleteAll">Delete database</button>
+	<button type="button" class = "btn "  id="CSV">CSV import</button>
+</div>
+	<hr/>
+	
+		<table id="tablaEmisiones" class="display" cellspacing="0" width="100%">
         <thead>
-            <tr>
+            <tr id = "tablaso">
                 <th>Country</th>
                 <th>CO2 emissions</th>
                 <th>Population</th>
@@ -109,7 +111,7 @@
         </thead>
  
         <tfoot>
-            <tr>
+            <tr id = "tablaso">
 				<th>Country</th>
                 <th>CO2 emissions</th>
                 <th>Population</th>
@@ -118,7 +120,7 @@
         </tfoot>
         <tbody id="emisiones"></tbody>
     </table>   
-    
+    </div>
     
      <!-- Bootstrap core JavaScript
     ================================================== -->

@@ -24,9 +24,7 @@
 	</div>
 </div>
  
-  <div class = "imagen">
-  
-  </div>
+
   
 <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
@@ -95,16 +93,18 @@
   
   
   
-  
-  	<button type="button" id="Post" onClick=window.location.href="formularioPostConsumo.html">Añadir</button>
-	<button type="button" id="Put" onClick=window.location.href="formularioPutConsumo.html">Editar</button>
-  	<button type="button" id="Delete">Borrar dato</button>
-  	<button type="button" id="DeleteAll">Borrar base de datos</button>
-  	<button type="button" id="CSV">Importar CSV</button>
-    
+<div id = "tables"  class="container">
+<div class = "btn-group" style = "margin-left:1.2%">
+  	<button type="button" class = "btn "  id="Post" onClick=window.location.href="formularioPostConsumo.html">Add</button>
+	<button type="button" class = "btn "  id="Put" onClick=window.location.href="formularioPutConsumo.html">Edit</button>
+  	<button type="button" class = "btn "  id="Delete">Delete input</button>
+  	<button type="button" class = "btn "  id="DeleteAll">Delete database</button>
+  	<button type="button" class = "btn "  id="CSV">CSV import</button>
+</div>
+	<hr/>
     <table id="tablaConsumo" class="display" cellspacing="0" width="100%">
         <thead>
-            <tr>
+            <tr id = "tablaso">
                 <th>Country</th>
                 <th>Energy production</th>
                 <th>Energy use</th>
@@ -114,7 +114,7 @@
         </thead>
  
         <tfoot>
-            <tr>
+            <tr id = "tablaso">
                 <th>Country</th>
                 <th>Energy production</th>
                 <th>Energy use</th>
@@ -124,6 +124,7 @@
         </tfoot>
         <tbody id="consumo"></tbody>
    </table>
+   </div>
    
     <!-- Bootstrap core JavaScript
     ================================================== -->
