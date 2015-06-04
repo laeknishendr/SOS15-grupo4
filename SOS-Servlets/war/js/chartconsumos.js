@@ -30,7 +30,7 @@ google.load('visualization','1.0',{'packages':['corechart']});
 					//console.log(name+" - "+temperature+"\n"); en funcion de donde esta me va imprimendo lo que quiero ver....//mas herramientas -> consola JavaScript -> console//
 				}
 				
-				
+				//style="align: center; width: 700px; height: 300px;"
 				
 				var opciones = {'title':'energy_use in country',
 								'width': 800,
