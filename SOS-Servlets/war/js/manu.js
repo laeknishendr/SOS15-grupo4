@@ -8,7 +8,8 @@ function dibujar() {
 	var request = $.ajax({
 		url : "api/v2/manuProxyServlet", // http://sos-2015-04.appspot.com
 		type : "GET",
-		dataR : $("").val()  // #payload --> en este caso al usar el "GET" no  nos hace falta definirlo.
+		dataR : $("").val()
+	// #payload --> en este caso al usar el "GET" no nos hace falta definirlo.
 	});
 
 	request.done(function(dataR, status, jqXHR) {

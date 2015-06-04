@@ -19,15 +19,15 @@ public class PapamoscasProxyServlet extends HttpServlet {
 		try {
 			URL myURL = new URL("http://papamoscas-isa.appspot.com/api/v4/birds?user=proUser1");
 			BufferedReader in = new BufferedReader(new InputStreamReader(myURL.openStream()));
-			 String inputLine;
-			 while ((inputLine = in.readLine()) != null){
-			           //System.out.println(inputLine);
-			           resp.getWriter().append(inputLine);
-			 }
-			 in.close();
-	 
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) {
+				// System.out.println(inputLine);
+				resp.getWriter().append(inputLine);
+			}
+			in.close();
+
 		} catch (IOException e) {
-				e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 }

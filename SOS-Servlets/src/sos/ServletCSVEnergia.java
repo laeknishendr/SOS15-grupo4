@@ -31,11 +31,10 @@ public class ServletCSVEnergia extends HttpServlet {
 		CSVReader reader = new CSVReader(fr);
 
 		String[] nextLine;
-		
 
 		try {
 			while ((nextLine = reader.readNext()) != null) {
-				createAndStoreEntity(nextLine[0],new Double(nextLine[1]),new Double(nextLine[2]),new Double(nextLine[3]));
+				createAndStoreEntity(nextLine[0], new Double(nextLine[1]), new Double(nextLine[2]), new Double(nextLine[3]));
 			}
 		} catch (NumberFormatException | TooManyResultsException | IOException e) {
 			e.printStackTrace();
@@ -48,8 +47,8 @@ public class ServletCSVEnergia extends HttpServlet {
 		}
 
 	}
-	
-	private void createAndStoreEntity(String name, Double no_fossil, Double fossil, Double temperature){
+
+	private void createAndStoreEntity(String name, Double no_fossil, Double fossil, Double temperature) {
 		Entity entity = new Entity("Energy");
 		entity.setProperty("name", name);
 		entity.setProperty("no_fossil", no_fossil);
@@ -71,6 +70,5 @@ public class ServletCSVEnergia extends HttpServlet {
 			datastore.put(entity);
 		}
 
-		
 	}
 }

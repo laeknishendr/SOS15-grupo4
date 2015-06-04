@@ -31,11 +31,10 @@ public class ServletCSVConsumo extends HttpServlet {
 		CSVReader reader = new CSVReader(fr);
 
 		String[] nextLine;
-		
 
 		try {
 			while ((nextLine = reader.readNext()) != null) {
-				createAndStoreEntity(nextLine[0],new Double(nextLine[1]),new Double(nextLine[2]),new Double(nextLine[3]),new Long(nextLine[4]));
+				createAndStoreEntity(nextLine[0], new Double(nextLine[1]), new Double(nextLine[2]), new Double(nextLine[3]), new Long(nextLine[4]));
 			}
 		} catch (NumberFormatException | TooManyResultsException | IOException e) {
 			e.printStackTrace();
@@ -48,8 +47,8 @@ public class ServletCSVConsumo extends HttpServlet {
 		}
 
 	}
-	
-	private void createAndStoreEntity(String country, Double energy_production, Double energy_use, Double energy_import, Long year){
+
+	private void createAndStoreEntity(String country, Double energy_production, Double energy_use, Double energy_import, Long year) {
 		Entity entity = new Entity("Consumos");
 		entity.setProperty("country", country);
 		entity.setProperty("energy_production", energy_production);
@@ -72,6 +71,5 @@ public class ServletCSVConsumo extends HttpServlet {
 			datastore.put(entity);
 		}
 
-		
 	}
 }

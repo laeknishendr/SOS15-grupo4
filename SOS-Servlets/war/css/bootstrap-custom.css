@@ -1,111 +1,159 @@
-#logo{
- visibility: visible; 
- -webkit-animation-duration: 700ms; 
- -webkit-animation-delay: 500ms; 
- text-align: center;  
- font-family:danielbd;
- margin-top: 35px;
+#logo {
+	visibility: visible;
+	-webkit-animation-duration: 700ms;
+	-webkit-animation-delay: 500ms;
+	text-align: center;
+	font-family: danielbd;
+	margin-top: 35px;
 }
 
-body{
-	background-color:#7FAC71;
+body {
+	background-color: #7FAC71;
 }
 
-
-hr{
-	opacity: 0; 
+hr {
+	opacity: 0;
 }
 
-.btn{
+.btn {
 	background: #7FAC71;
-	color: #f7f7f7; 
-	font-family:"terminal"; 
+	color: #f7f7f7;
+	font-family: "terminal";
 	font-size: 20px;
 }
 
-#tablaso{
-    background: #a1c497;
+#tablaso {
+	background: #a1c497;
 }
 
-#tables{
+#tables {
 	background-color: #d4e8b7;
-    opacity: 0.9;
-    border-radius: 10px;
-    padding: 2%;
-    margin-top: 4%;
-    margin-bottom:4%;
+	opacity: 0.9;
+	border-radius: 10px;
+	padding: 2%;
+	margin-top: 4%;
+	margin-bottom: 4%;
 }
 
-
-
-.btn:hover{
+.btn:hover {
 	background: #3b682c;
 	color: #ffffff
 }
-#headertext{margin-top: 20px;}
 
+#headertext {
+	margin-top: 20px;
+}
 
 .navbar {
-   background-color: #000000; 
-   opacity: 0.75; 
-   navbar-height: 15px;
-   margin-bottom: 20px;
+	background-color: #000000;
+	opacity: 0.75;
+	navbar-height: 15px;
+	margin-bottom: 20px;
 }
 
-.navbar-brand{
-	font-family:danielbd; 
-	opacity: 1; 
-	color: #F4F4F4; 	
+.navbar-brand {
+	font-family: danielbd;
+	opacity: 1;
+	color: #F4F4F4;
 }
 
-.navbar li { color: #000; font-family:"terminal"; font-size:20px;} 
-
-
-#headertext{
-	text-align:center; 
-	font-family:danielbd; 
-	color:#575b54;
+.navbar li {
+	color: #000;
+	font-family: "terminal";
+	font-size: 20px;
 }
-@font-face {
-   	font-family: "danielbd";
-   	src: url(/fonts/danielbd.ttf) ;
-}
-@font-face {
-   	font-family: "cashew";
-   	src: url(/fonts/Cashew.ttf) ;
+
+#headertext {
+	text-align: center;
+	font-family: danielbd;
+	color: #575b54;
 }
 
 @font-face {
-   	font-family: "terminal";
-   	src: url(/fonts/TerminalDosis-Light.ttf) ;
+	font-family: "danielbd";
+	src: url(/fonts/danielbd.ttf);
 }
 
-p{
+@font-face {
 	font-family: "cashew";
-	font-size:30px; 
+	src: url(/fonts/Cashew.ttf);
 }
 
-h1{
-	font-family:"cashew"; 
-	font-size:40px;
+@font-face {
+	font-family: "terminal";
+	src: url(/fonts/TerminalDosis-Light.ttf);
 }
 
-label{
-	font-family:"terminal";
-	size:25px;
-}
-  
-.dataTables_info, .dataTables_paginate{
-	font-family:"terminal"; 
-}
-.jumbotron{
-   	position:relative; 
-   	background:#000 url("../sos-background.png") center center; 
-   	width:100%; 
-   	height:50%; 
-   	background-size:cover; 
-   	overflow:hidden;  
+p {
+	font-family: "cashew";
+	font-size: 30px;
 }
 
+h1 {
+	font-family: "cashew";
+	font-size: 40px;
+	text-align: center;
+}
 
-    
+label {
+	font-family: "terminal";
+	size: 25px;
+}
+
+.dataTables_info, .dataTables_paginate {
+	font-family: "terminal";
+}
+
+.jumbotron {
+	position: relative;
+	background: #000 url("../sos-background.png") center center;
+	width: 100%;
+	height: 50%;
+	background-size: cover;
+	overflow: hidden;
+}
+
+.form {
+	text-align: center;
+	border: 1px solid black;
+	border-radius: 10px;
+	background-color: #d4e8b7;
+	padding-left: 10%;
+	padding-right: 10%;
+	padding-top: 2%;
+	padding-bottom: 2%;
+	align: center;
+	margin-left: 30%;
+	margin-right: 30%;
+}
+
+.form-control {
+	width: 258px;
+	align: center;
+	margin-left: 15%;
+	margin-right: 15%;
+}
+
+.restClient {
+	border: 1px solid black;
+	border-radius: 10px;
+	background-color: #d4e8b7;
+	padding-left: 5%;
+	padding-right: 5%;
+	padding-top: 2%;
+	padding-bottom: 2%;
+	margin-left: 30%;
+	margin-right: 30%;
+}
+
+.help {
+	border: 1px solid black;
+	border-radius: 10px;
+	background-color: #d4e8b7;
+	padding-left: 5%;
+	padding-right: 5%;
+	padding-top: 2%;
+	padding-bottom: 2%;
+	margin-left: 20%;
+	margin-right: 20%;
+}

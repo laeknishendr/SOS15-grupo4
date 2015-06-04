@@ -1,146 +1,182 @@
 <!DOCTYPE HTML>
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Manual de usuario</title>
-    <link href = "/css/bootstrap.min.css" rel = "stylesheet">
-    <link rel="stylesheet" href="/css/bootstrap-custom.css">
-    <link rel="stylesheet" href="css/animate.css">
-  </head>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Manual de usuario</title>
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/bootstrap-custom.css">
+<link rel="stylesheet" href="css/animate.css">
+</head>
 
-  <body>
-  <div class="jumbotron">
-	<div class = "container">
-		<div class="caption">
-  			<h1 id = "logo" >SOS - Group 4</h1>
-  		</div>
-  		<div>
-  			<p id = "headertext">Welcome to our project!<p>
+<body>
+	<div class="jumbotron">
+		<div class="container">
+			<div class="caption">
+				<h1 id="logo">SOS - Group 4</h1>
+			</div>
+			<div>
+				<p id="headertext">Welcome to our project!
+				<p>
+			</div>
 		</div>
 	</div>
-</div>
- 
-  <div class = "imagen">
-  
-  </div>
-  
-<nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>   
-          </button>
-          <a class="navbar-brand" href="/index.html" >Group 4</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-          	<li>
-			  <a id="dropdownMenu1" href="#" class="sr-only dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="width: 100%;height: 50px;">
-			  Servlets
-			  <span class="caret"></span>
-			  </a>
-			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-			    <li ><a href="/api/v2/emisiones">Emissions</a></li>
-       	  		<li><a href="/api/v2/tiposenergias">Energy types</a></li>
-      			<li><a href="/api/v2/consumos">Energy consumption</a></li>
-			  </ul>
-            </li>
-            <li>
-			  <a id="dropdownMenu1" href="#" class="sr-only dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="width: 100%;height: 50px;">
-			  Tables<span class="caret"></span>
-			  </a>
-			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-			  
-			    <li><a href="tablaEnergia.html">Energy tables</a></li>
-    			<li><a href="tablaConsumo.html">Consumption tables</a></li>
-			    <li ><a href="tablaEmisiones.html">Emission tables</a></li>
-			  </ul>
-            </li>
-            
-            	<li>
-			  <a id="dropdownMenu1" href="#" class="sr-only dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="width: 100%;height: 50px;">
-			  Charts	
-			  <span class="caret"></span>
-			  </a>
-			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-			    <li ><a href="chartsEmisiones.html">Emission charts</a></li>
-       	  		<li><a href="chartsTiposEnergias.html">Energy sources charts</a></li>
-      			<li><a href="chartsConsumos.html">Consumptions charts</a></li>
-			  </ul>
-            </li>
-            
-            <li>
-			  <a id="dropdownMenu1" href="#" class="sr-only dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="width: 100%;height: 50px;">
-			  Chars externos
-			  <span class="caret"></span>
-			  </a>
-			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-			    <li><a href="papamoscas.html">API EXTERNA-Papamoscas charts</a></li>
-      			<li><a href="mariajoseexterno.html">API EXTERNA-Mariajose charts</a></li>
-      			<li><a href="manuexterno.html">API EXTERNA-Manu charts</a></li>
-			  </ul>
-            </li>
-            <li><a href = "restClient.html">REST Client</a></li>
-            <li><a href = "help.html">Help</a></li>
-            
-          </ul>
-          
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav> 
-    <h1>Manual de usuario</h1>
-	
-	<div>
-		<h2 id="get">GET</h2>
+
+	<div class="imagen"></div>
+
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+				</button>
+				<a class="navbar-brand" href="/index.html">Group 4</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a id="dropdownMenu1" href="#"
+						class="sr-only dropdown-toggle" data-toggle="dropdown"
+						role="button" aria-expanded="false"
+						style="width: 100%; height: 50px;"> Servlets <span
+							class="caret"></span>
+					</a>
+						<ul class="dropdown-menu" role="menu"
+							aria-labelledby="dropdownMenu1">
+							<li><a href="/api/v2/emisiones">Emissions</a></li>
+							<li><a href="/api/v2/tiposenergias">Energy types</a></li>
+							<li><a href="/api/v2/consumos">Energy consumption</a></li>
+						</ul></li>
+					<li><a id="dropdownMenu1" href="#"
+						class="sr-only dropdown-toggle" data-toggle="dropdown"
+						role="button" aria-expanded="false"
+						style="width: 100%; height: 50px;"> Tables<span class="caret"></span>
+					</a>
+						<ul class="dropdown-menu" role="menu"
+							aria-labelledby="dropdownMenu1">
+
+							<li><a href="tablaEnergia.html">Energy tables</a></li>
+							<li><a href="tablaConsumo.html">Consumption tables</a></li>
+							<li><a href="tablaEmisiones.html">Emission tables</a></li>
+						</ul></li>
+
+					<li><a id="dropdownMenu1" href="#"
+						class="sr-only dropdown-toggle" data-toggle="dropdown"
+						role="button" aria-expanded="false"
+						style="width: 100%; height: 50px;"> Charts <span class="caret"></span>
+					</a>
+						<ul class="dropdown-menu" role="menu"
+							aria-labelledby="dropdownMenu1">
+							<li><a href="chartsEmisiones.html">Emission charts</a></li>
+							<li><a href="chartsTiposEnergias.html">Energy sources
+									charts</a></li>
+							<li><a href="chartsConsumos.html">Consumptions charts</a></li>
+						</ul></li>
+
+					<li><a id="dropdownMenu1" href="#"
+						class="sr-only dropdown-toggle" data-toggle="dropdown"
+						role="button" aria-expanded="false"
+						style="width: 100%; height: 50px;"> Chars externos <span
+							class="caret"></span>
+					</a>
+						<ul class="dropdown-menu" role="menu"
+							aria-labelledby="dropdownMenu1">
+							<li><a href="papamoscas.html">API EXTERNA-Papamoscas
+									charts</a></li>
+							<li><a href="mariajoseexterno.html">API
+									EXTERNA-Mariajose charts</a></li>
+							<li><a href="manuexterno.html">API EXTERNA-Manu charts</a></li>
+						</ul></li>
+					<li><a href="restClient.html">REST Client</a></li>
+					<li><a href="help.html">Help</a></li>
+
+				</ul>
+
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</nav>
+	<h1>Manual de usuario</h1>
+
+	<div class="help">
+
+		<div>
+			<h2 id="get">GET</h2>
 			<h3>Acción sobre lista</h3>
-				<p>Si la base de datos tiene elementos, el servidor devolverá una lista de las entradas. Si la base de datos está
-				vacía, devolverá una lista vacia.</p>
+			<p>Si la base de datos tiene elementos, el servidor devolverá una
+				lista de las entradas. Si la base de datos está vacía, devolverá una
+				lista vacia.</p>
 			<h3>Acción sobre recurso</h3>
-				<p>Si en la base de datos hay un recurso cuya clave sea igual al nombre solicitado, el servidor devolverá dicho
-				elemento. Si no lo hay, el servidor devolverá un error <I>404, NOT FOUND</I>.</p>
+			<p>
+				Si en la base de datos hay un recurso cuya clave sea igual al nombre
+				solicitado, el servidor devolverá dicho elemento. Si no lo hay, el
+				servidor devolverá un error <I>404, NOT FOUND</I>.
+			</p>
+		</div>
+
+		<div>
+			<h2 name="post">POST</h2>
+			<h3>Acción sobre lista</h3>
+			<p>
+				Si no se introduce ningún dato, el servidor devolverá un error <I>400,
+					BAD REQUEST</I>. Si el dato que se quiere introducir ya está en la base
+				de datos, el servidor devolverá un error <I>409, CONFLICT</I>. Si
+				no, el servidor devolverá <I>200 OK</I>, y guardará el dato en la
+				base de datos.
+			</p>
+			<h3>Acción sobre recurso</h3>
+			<p>
+				Esta acción no está permitida, el servidor devolverá un error <I>405,
+					METHOD_NOT_ALLOWED</I>.
+			</p>
+		</div>
+
+		<div>
+			<h2 name="put">PUT</h2>
+			<h3>Acción sobre lista</h3>
+			<p>
+				Esta acción no está permitida, el servidor devolverá un error <I>405,
+					METHOD_NOT_ALLOWED</I>.
+			</p>
+			<h3>Acción sobre recurso</h3>
+			<p>
+				Si no se introduce ningún dato, el servidor devolverá un error <I>400,
+					BAD REQUEST</I>. Si el dato que se quiere introducir no está en la base
+				de datos, el servidor devolverá un error <I>403, FORBIDDEN</I>. Si
+				no, el servidor devolverá <I>200 OK</I>, y actualizará el dato en la
+				base de datos.
+			</p>
+		</div>
+
+		<div>
+			<h2 name="delete">DELETE</h2>
+			<h3>Acción sobre lista</h3>
+			<p>
+				El servidor devolverá <I>200 OK</I> y borrará toda la base de datos.
+			</p>
+			<h3>Acción sobre recurso</h3>
+			<p>
+				Si el elemento no está en la base de datos, el servidor devolverá un
+				error <I>404, NOT FOUND</I>. Si no, el servidor devolverá <I>200
+					OK</I> y borrará el elemento de la base de datos.
+			</p>
+		</div>
+
 	</div>
-	
-	<div>	
-		<h2 name="post">POST</h2>
-			<h3>Acción sobre lista</h3>
-				<p>Si no se introduce ningún dato, el servidor devolverá un error <I>400, BAD REQUEST</I>. Si el dato que se quiere introducir 
-				ya está en la base de datos, el servidor devolverá un error <I>409, CONFLICT</I>. Si no, el servidor devolverá <I>200 OK</I>, y 
-				guardará el dato en la base de datos.</p>
-			<h3>Acción sobre recurso</h3>
-				<p>Esta acción no está permitida, el servidor devolverá un error <I>405, METHOD_NOT_ALLOWED</I>.</p>
-	</div>
-	
-	<div>	
-		<h2 name="put">PUT</h2>
-			<h3>Acción sobre lista</h3>
-				<p>Esta acción no está permitida, el servidor devolverá un error <I>405, METHOD_NOT_ALLOWED</I>.</p>
-			<h3>Acción sobre recurso</h3>
-				<p>Si no se introduce ningún dato, el servidor devolverá un error <I>400, BAD REQUEST</I>. Si el dato que se quiere 
-				introducir no está en la base de datos, el servidor devolverá un error <I>403, FORBIDDEN</I>. Si no, el servidor devolverá 
-				<I>200 OK</I>, y actualizará el dato en la base de datos.</p>
-	</div>
-	
-	<div>	
-		<h2 name="delete">DELETE</h2>
-			<h3>Acción sobre lista</h3>
-				<p>El servidor devolverá <I>200 OK</I> y borrará toda la base de datos.</p>
-			<h3>Acción sobre recurso</h3>
-				<p>Si el elemento no está en la base de datos, el servidor devolverá un error <I>404, NOT FOUND</I>. Si no, el servidor 
-				devolverá <I>200 OK</I> y borrará el elemento de la base de datos.</p>
-	</div>    
-    
-     <!-- Bootstrap core JavaScript
+
+	<!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src = "/js/jquery-index.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug 
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/jquery-index.js"></script>
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug 
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
     
     -->
-    
-   </div>
-    
-  </body>
+
+	</div>
+
+</body>
 </html>

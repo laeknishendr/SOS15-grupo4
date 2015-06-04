@@ -19,15 +19,15 @@ public class manuProxyServlet extends HttpServlet {
 		try {
 			URL myURL = new URL("http://sos-2014-05.appspot.com/api/v1/students");
 			BufferedReader in = new BufferedReader(new InputStreamReader(myURL.openStream()));
-			 String inputLine;
-			 while ((inputLine = in.readLine()) != null){
-			           //System.out.println(inputLine);
-			           resp.getWriter().append(inputLine);
-			 }
-			 in.close();
-	 
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) {
+				// System.out.println(inputLine);
+				resp.getWriter().append(inputLine);
+			}
+			in.close();
+
 		} catch (IOException e) {
-				e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 }

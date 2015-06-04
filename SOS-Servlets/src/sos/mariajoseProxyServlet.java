@@ -19,15 +19,15 @@ public class mariajoseProxyServlet extends HttpServlet {
 		try {
 			URL myURL = new URL("http://transparenciadecuentaspublicas.es/api/1.0/territories/?page=1&format=json");
 			BufferedReader in = new BufferedReader(new InputStreamReader(myURL.openStream()));
-			 String inputLine;
-			 while ((inputLine = in.readLine()) != null){
-			           //System.out.println(inputLine);
-			           resp.getWriter().append(inputLine);
-			 }
-			 in.close();
-	 
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) {
+				// System.out.println(inputLine);
+				resp.getWriter().append(inputLine);
+			}
+			in.close();
+
 		} catch (IOException e) {
-				e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 }
